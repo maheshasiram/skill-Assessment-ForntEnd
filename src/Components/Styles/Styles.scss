@@ -1,0 +1,12 @@
+/* Define standard variables and values for website */
+$bgcolor: lightblue;
+$textcolor: darkblue;
+$fontsize: 14px;
+$fontfamily: fantasy;
+$fontstyle: oblique;
+
+/* Use the variables */
+h1 {
+  font-family: $fontfamily;
+  font-style: $fontstyle;
+}
