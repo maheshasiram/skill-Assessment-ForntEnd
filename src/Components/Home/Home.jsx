@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import FormDialog from "../Dialogs/CustomeDialog";
+import AboutUs from "../Helpers/AboutUs/AboutUs";
 import Login from "../Login/Login";
 
 
@@ -13,8 +14,8 @@ function Home() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        health && health.status == 200 && navigate('/servererror')
-    }, [])
+        health && health.status != 200 && navigate('/servererror');
+    }, []);
 
     const onOpenLoginForm = () => {
         setopenLoginDialog(true);
@@ -25,16 +26,15 @@ function Home() {
     }
 
     return (
-        <div className="homeMianDiv">
-            <h1> Welcome To Skill Assessment</h1>
-            <Login />
+            <div className="homeMianDiv">
+                <div className="homeHeader">
+                <h1> Welcome To Skill Assessment</h1>
+                <Login />
+                </div>
+               
+                <AboutUs />
+            </div>
 
-            {/* <FormDialog 
-            onCloseDialog={onCloseLoginForm}
-            openLoginDialog={openLoginDialog}
-            /> */}
-
-        </div>
     )
 }
 

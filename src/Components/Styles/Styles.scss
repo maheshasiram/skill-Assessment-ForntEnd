@@ -3,14 +3,44 @@ $bgcolor: #E7EBF0;
 $textcolor: darkblue;
 $fontsize: 14px;
 $fontfamily: fantasy;
-$fontstyle: oblique;
+$fontstyle: italic;
 
 /* Use the variables */
-.homeMianDiv{
+.homeMianDiv {
   background-color: $bgcolor;
-  padding: 2px;
-  h1 {
-    font-family: $fontfamily;
-    font-style: $fontstyle;
+  font-style: $fontstyle;
+  padding: 2%;
+
+  .homeHeader {
+
+    // position: -webkit-sticky;
+    //   position: sticky;
+    //   top: 0;
+    h1 {
+      font-family: $fontfamily;
+    }
+
+    .loginMainComponent {
+      display: inline-block;
+    }
   }
+
+  // .aboutUs {
+  //    height: 300px;
+  //    overflow: auto;
+  // }
+
+  .carousel-demo .product-item .product-item-content {
+    border: 1px solid var(--surface-d);
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.carousel-demo .product-item .product-image {
+    width: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+                
 }

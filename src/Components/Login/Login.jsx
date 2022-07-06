@@ -88,8 +88,8 @@ function Login() {
 
 
   return (
-    <div id="loginMainComponent">
-      <Card title="Login" className='p-3 mb-5 shadow-7 hover:shadow-8' style={{ width: '25rem', marginLeft: '17em', borderRadius: '1rem'}} /*header={header}*/ footer={footer}>
+    <div className="loginMainComponent">
+      <Card title="Login" className='mb-5 shadow-7 hover:shadow-8' style={{ width: '25rem', borderRadius: '1rem'}} /*header={header}*/ footer={footer}>
 
       <form id="login" onSubmit={formik.handleSubmit}>
       <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
