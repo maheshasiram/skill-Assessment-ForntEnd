@@ -11,7 +11,7 @@ export const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case Types.HEALTH:
-            //console.log("reducer.health", action.payload);
+            console.log("reducer.health", action.payload);
             return { ...state, health: action.payload }
 
         case Types.LOGIN:

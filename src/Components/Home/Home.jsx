@@ -1,27 +1,39 @@
-import React, { useState } from "react";
-import { Button } from "primereact/button";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import FormDialog from "../Dialogs/CustomeDialog";
+import Login from "../Login/Login";
+
 
 function Home() {
 
-const [openLoginDialog, setopenLoginDialog] = useState(false);    
+    const [openLoginDialog, setopenLoginDialog] = useState(false);
+    const { health } = useSelector(state => state);
+    const navigate = useNavigate();
 
-    const onOpenLoginForm=()=>{
+    useEffect(() => {
+        health && health.status == 200 && navigate('/servererror')
+    }, [])
+
+    const onOpenLoginForm = () => {
         setopenLoginDialog(true);
     }
 
-    const onCloseLoginForm = ()=>{
+    const onCloseLoginForm = () => {
         setopenLoginDialog(false);
     }
 
     return (
-        <div>
+        <div className="homeMianDiv">
             <h1> Welcome To Skill Assessment</h1>
-            <Button label="Login" icon="pi pi-user"  className="p-button-rounded p-button-secondary" onClick={onOpenLoginForm} />
-            <FormDialog 
+            <Login />
+
+            {/* <FormDialog 
             onCloseDialog={onCloseLoginForm}
             openLoginDialog={openLoginDialog}
-            />
+            /> */}
+
         </div>
     )
 }
