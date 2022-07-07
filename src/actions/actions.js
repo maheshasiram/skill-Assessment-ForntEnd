@@ -18,7 +18,7 @@ export const onSubmitLogin = (values) => {
       }).then(response => {
         dispatch({ type: Types.LOGIN, payload: response });
         setTimeout(() => {
-         dispatch(getusers(response.data.token)) 
+         dispatch(getUsers(response.data.token)) 
         }, 500);
       })
       .catch(err => {
@@ -28,7 +28,7 @@ export const onSubmitLogin = (values) => {
   }
 }
 
- const getusers =(token)=>{
+ const getUsers =(token)=>{
   return function (dispatch) {
     const config={
       headers:{
@@ -45,11 +45,9 @@ export const onSubmitLogin = (values) => {
      axiosinstance.get(endPoints.USERS,config
       ).then(response => {
         //dispatch({ type: Types.LOGIN, payload: response });
-        console.log(response)
       })
       .catch(err => {
        // dispatch({ type: Types.LOGIN, payload: err });
-        console.log("err", err)
       })
   }
 }

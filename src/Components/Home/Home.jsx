@@ -15,7 +15,7 @@ function Home() {
 
     useEffect(() => {
         health && health.status != 200 && navigate('/servererror');
-    }, []);
+    }, [health]);
 
     const onOpenLoginForm = () => {
         setopenLoginDialog(true);
