@@ -15,6 +15,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
 import { Card } from 'primereact/card';
+import { ProgressSpinner } from 'primereact/progressspinner';
+ 
 
 /**
  * User Login Page 
@@ -25,7 +27,8 @@ function Login() {
   /**
    * get state from reducer
    */
-  const { login } = useSelector(state => state)
+  const { login, isLoginLoading } = useSelector(state => state)
+
   /**
    * set useDispatch Hook to const dispatch
    */
@@ -45,10 +48,7 @@ function Login() {
   });
 
     const [values, setValues] = React.useState({
-      amount: '',
       password: '',
-      weight: '',
-      weightRange: '',
       showPassword: false,
     });
   
@@ -67,12 +67,22 @@ function Login() {
       event.preventDefault();
     };
 
+    const onLoginUser = (values) =>{
+      dispatch(onSubmitLogin(values, (data)=>{
+        if(data.status === 200){
+          navigate("/profile");
+        }
+      }))
+    }
+
   //   const header = (
   //     <img alt="Card" src="images/usercard.png" onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} />
   // );
 
     const footer = (
-      <Button form='login' label="Login" type='submit' icon="pi pi-user" className="p-button-rounded p-button-secondary" />
+    <Button form='login' label={!isLoginLoading ? "Login":'  '} type='submit' icon="pi pi-user" className="p-button-rounded p-button-secondary">
+       {isLoginLoading && <ProgressSpinner style={{width: '30px', height: '30px'}} strokeWidth="8" animationDuration=".5s"/>}
+      </Button>
   );
   const formik = useFormik({
     initialValues: {
@@ -80,8 +90,7 @@ function Login() {
       password: '',
     },
     onSubmit: (values) => {
-      dispatch(onSubmitLogin(values))
-       navigate("/profile");
+      onLoginUser(values);
     },
     validationSchema: LogininSchema
   })
@@ -89,13 +98,13 @@ function Login() {
 
   return (
     <div className="loginMainComponent">
-      <Card title="Login" className='mb-5 shadow-7 hover:shadow-8' style={{ width: '25rem', borderRadius: '1rem'}} /*header={header}*/ footer={footer}>
-
+      <Card title="Login" className='logiCard mb-5 shadow-7 hover:shadow-8' style={{ width: '25rem', borderRadius: '1rem'}} /*header={header}*/ footer={footer}>
+    {login && login.response && (login.response.data.status === 401 || login.response.data.status === 400) && <div className='errmsg mb-3'>{login.response.data.message}</div>}
       <form id="login" onSubmit={formik.handleSubmit}>
-      <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+      <Box>
+        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 2.5 }} />
         <TextField
-        sx={{ width: '15em' }}
+         sx={{ width: '15em'}}
           name='username'
           label="Username"
           variant='standard'
@@ -106,8 +115,8 @@ function Login() {
           helperText={formik.touched.username && formik.errors.username}
         />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-     <LockIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}></LockIcon>
+      <Box>
+     <LockIcon sx={{ color: 'action.active', mr: 1, my: 2.5 }}></LockIcon>
           <TextField
           type={values.showPassword ? 'text' : 'password'}
           name='password'
@@ -130,13 +139,10 @@ function Login() {
                 </IconButton>
               </InputAdornment>
           }}
-        
         />
     </Box>
-    
       </form>
       </Card>
-
     </div>
   )
 }

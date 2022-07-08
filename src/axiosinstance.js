@@ -10,7 +10,6 @@ import store from "./store";
 const axiosinstance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
   timeout: 1000,
-
   headers: 
   {'Content-Type': 'application/json'}
 });
