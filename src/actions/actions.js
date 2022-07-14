@@ -20,10 +20,7 @@ export const onSubmitLogin = (values, callback) => {
         callback(response)
         dispatch({ type: Types.IS_LOGIN_LOADING, payload: false });
         dispatch({ type: Types.LOGIN, payload: response });
-        setTimeout(() => {
-         dispatch(getUsers(response.data.token)) 
-        }, 500);
-       
+       sessionStorage.setItem('JWTtoken',response.data.token)
       })
       .catch(err => {
         callback(err)
@@ -34,7 +31,7 @@ export const onSubmitLogin = (values, callback) => {
   }
 }
 
- const getUsers =(token)=>{
+ export const getUsers =(token)=>{
   return function (dispatch) {
     const config={
       headers:{
@@ -43,10 +40,10 @@ export const onSubmitLogin = (values, callback) => {
     }
      axiosinstance.get(endPoints.USERS,config
       ).then(response => {
-        //dispatch({ type: Types.LOGIN, payload: response });
+        dispatch({ type: Types.GET_USERS, payload: response });
       })
       .catch(err => {
-       // dispatch({ type: Types.LOGIN, payload: err });
+        dispatch({ type: Types.GET_USERS, payload: err });
       })
   }
 }

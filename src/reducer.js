@@ -6,6 +6,7 @@ const initialState = {
     login: null,
     decodedtoken: null,
     isLoginLoading: false,
+    userDetails: null,
 }
 
 export const reducer = (state = initialState, action) => {
@@ -22,6 +23,9 @@ export const reducer = (state = initialState, action) => {
         case Types.IS_LOGIN_LOADING:
             console.log("......reducer.isLoading", action.payload)
             return { ...state, isLoginLoading: action.payload }
+
+            case Types.GET_USERS:
+                return{ ...state, userDetails: action.payload}
 
         default:
             return state;
