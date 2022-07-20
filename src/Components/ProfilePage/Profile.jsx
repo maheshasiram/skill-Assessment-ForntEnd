@@ -3,6 +3,7 @@ import AccessTabs from "./AccessTabs";
 import ProfileHeader from "./ProfileHeader";
 
 function Profile(){
+ 
   return(
     <React.Fragment>
       <ProfileHeader />

@@ -4,7 +4,9 @@
 const endPoints={
     LOGIN: "/user/login",
     HEALTH: "/health",
-    USERS: "/users"
+    USERS: "/users",
+    USER: "/user",
+    REFRESH: "token/refresh",
 } 
 
 export default endPoints;

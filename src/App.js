@@ -15,7 +15,7 @@ import store from './store';
 function App() {
 
   // create dispatch to call api's in actions
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
   /**
    * to hit the url to check application health.
@@ -27,6 +27,7 @@ function App() {
       }).catch(err => {
         dispatch({ type: Types.HEALTH, payload: err });
       });
+
   }, []);
 
   return (
@@ -35,7 +36,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path='/servererror' element={<ServerError /> } ></Route>
+          <Route path='/servererror' element={<ServerError />} ></Route>
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,4 +1,3 @@
-//import { Formik, Form, } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,15 +46,13 @@ function Login() {
       .required('Required'),
   });
 
+  //setting values for show and hide password
     const [values, setValues] = React.useState({
       password: '',
       showPassword: false,
     });
   
-    const handleChange = (prop) => (event) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
-  
+    //onclick on show hide password icon
     const handleClickShowPassword = () => {
       setValues({
         ...values,
@@ -63,11 +60,17 @@ function Login() {
       });
     };
   
+    //onmousedown for show hide password 
     const handleMouseDownPassword = (event) => {
       event.preventDefault();
     };
 
+    /**
+     * onclick on login button
+     * @param {form field values} values 
+     */ 
     const onLoginUser = (values) =>{
+      //calling onSubmitLogin function in actions and sending the values and callback function for response after api call
       dispatch(onSubmitLogin(values, (data)=>{
         if(data.status === 200){
           navigate("/profile");
@@ -79,19 +82,28 @@ function Login() {
   //     <img alt="Card" src="images/usercard.png" onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} />
   // );
 
+//set login button as footer for card 
     const footer = (
     <Button form='login' label={!isLoginLoading ? "Login":'  '} type='submit' icon="pi pi-user" className="p-button-rounded p-button-secondary">
        {isLoginLoading && <ProgressSpinner style={{width: '30px', height: '30px'}} strokeWidth="8" animationDuration=".5s"/>}
       </Button>
   );
+
+  //useformik hook for from validations and form values
   const formik = useFormik({
+
+    //set initial field values when form is opened in initialValues object
     initialValues: {
       username: '',
       password: '',
     },
+
+    //onsubmitting the form 
     onSubmit: (values) => {
       onLoginUser(values);
     },
+    
+   // LogininSchema is function of yup validation assinig to validationSchema for form validation
     validationSchema: LogininSchema
   })
 
@@ -99,7 +111,7 @@ function Login() {
   return (
     <div className="loginMainComponent">
       <Card title="Login" className='logiCard mb-5 shadow-7 hover:shadow-8' style={{ width: '25rem', borderRadius: '1rem'}} /*header={header}*/ footer={footer}>
-    {login && login.response && (login.response.data.status === 401 || login.response.data.status === 400) && <div className='errmsg mb-3'>{login.response.data.message}</div>}
+    {login && login.response && (login.response.data.status === 401 || login.response.data.status === 400 || login.response.data.status === 500) && <div className='errmsg mb-3'>{login.response.data.message}</div>}
       <form id="login" onSubmit={formik.handleSubmit}>
       <Box>
         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 2.5 }} />
