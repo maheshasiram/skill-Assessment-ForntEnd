@@ -9,32 +9,56 @@ const initialState = {
     isLoginLoading: false,
     userDetails: null,
     createUser: null,
-    usersParams: {page: 1, pageSize: 10, search: '', sortBy: '', orderBy: ''}
+    usersParams: { page: 1, pageSize: 10, search: '', sortBy: '', orderBy: '' },
+    getUserRoles: null,
+    isLoader: false,
+    modal: {
+        header: '',
+        status: 0,
+        open: false,
+        message: "",
+        onok: () => {},
+        onCancel: () => {},
+    }
 }
-
 export const reducer = (state = initialState, action) => {
-    switch (action.type) {
+        switch (action.type) {
 
-        case Types.HEALTH:
-            console.log("reducer.health", action.payload);
-            return { ...state, health: action.payload }
+            case Types.HEALTH:
+                console.log("reducer.health", action.payload);
+                return { ...state, health: action.payload }
 
-        case Types.LOGIN:
-             //console.log("...reducer.login", action.payload.data)
-            return { ...state, login: action.payload, decodedtoken: action.payload.data && jwtDecode(action.payload.data.token) }
+            case Types.LOGIN:
+                //console.log("...reducer.login", action.payload.data)
+                return { ...state, login: action.payload, decodedtoken: action.payload.data && jwtDecode(action.payload.data.token) }
 
-        case Types.IS_LOGIN_LOADING:
-            console.log("......reducer.isLoading", action.payload)
-            return { ...state, isLoginLoading: action.payload }
+            case Types.IS_LOGIN_LOADING:
+                console.log("......reducer.isLoading", action.payload)
+                return { ...state, isLoginLoading: action.payload }
 
             case Types.GET_USERS:
                 console.log("......users-reducer", action.payload)
-                return{ ...state, userDetails: action.payload}
+                return { ...state, userDetails: action.payload }
 
-                case Types.CREATE_USER:
-                    return{ ...state, createUser: action.payload}
+            case Types.CREATE_USER:
+                return { ...state, createUser: action.payload }
 
-        default:
-            return state;
+            case Types.GET_USER_ROLES:
+                return { ...state, getUserRoles: action.payload }
+
+                case Types.ON_OPEN_ALERT_DIALOG:
+                return { ...state, modal: action.payload }
+
+                case Types.ON_CLOSE_ALERT_DIALOG:
+                return { ...state, modal: action.payload }
+
+                case Types.ON_SET_LOADER:
+                return { ...state, isLoader: action.payload }
+
+            default:
+                return state;
+        }
     }
-}
+
+
+    

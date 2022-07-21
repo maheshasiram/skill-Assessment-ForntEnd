@@ -13,12 +13,9 @@ const RefreahToken = (token) => {
   //decode token using jwtDecode
   //assign to decodedtoekn constat 
   const decodedtoekn = jwtDecode(token);
-
   var unixTimeStamp = decodedtoekn && decodedtoekn.exp;
   var date = new Date(unixTimeStamp * 1000);
   const stamp_time = date.getTime() - Date.now()
-  console.log("......15", date, date.getTime(), Date.now());
-
   //setInterval is to call for every given interval of time in milliseconds
   setInterval(() => {
     //get Authorization token, set to headers and assigning to config constant
@@ -27,7 +24,6 @@ const RefreahToken = (token) => {
         'Authorization': 'Bearer ' + token,
       }
     }
-
     //post request for REFRESH api 
     //axiosinstance is imported , we decleared baseurl, axios and headers 
     //endpoints is imported, we decleared api end points
@@ -68,7 +64,6 @@ export const onSubmitLogin = (values, callback) => {
         callback(err)
         dispatch({ type: Types.LOGIN, payload: err });
         dispatch({ type: Types.IS_LOGIN_LOADING, payload: false });
-        // console.log("err", err)
       })
   }
 }
@@ -103,7 +98,7 @@ export const getUsers = (token, usersParams) => {
  * @param {get form field values entered by user} values 
  * @returns user is Authorised or not 
  */
-export const createUser = (values) => {
+export const createUser = (values, callback) => {
   return function (dispatch) {
     const config = {
       headers: {
@@ -113,11 +108,29 @@ export const createUser = (values) => {
     axiosinstance.post(endPoints.USER, values, config)
       .then(response => {
         dispatch({ type: Types.CREATE_USER, payload: response });
+        callback(response);
       })
       .catch(err => {
         dispatch({ type: Types.CREATE_USER, payload: err });
+        callback(err)
       })
   }
 }
 
+export const getUserRoles = () => {
+  return function (dispatch) {
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.get(endPoints.USERROLES, config)
+      .then(response => {
+        dispatch({ type: Types.GET_USER_ROLES, payload: response });
+      })
+      .catch(err => {
+        dispatch({ type: Types.GET_USER_ROLES, payload: err });
+      })
+  }
+}
 

@@ -6,6 +6,7 @@ const endPoints={
     HEALTH: "/health",
     USERS: "/users",
     USER: "/user",
+    USERROLES: "user/roles",
     REFRESH: "token/refresh",
 } 
 

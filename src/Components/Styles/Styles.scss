@@ -12,6 +12,9 @@ $errmsg: red;
   font-style: $fontstyle;
   padding: 2%;
 
+  .errmsg{
+    color: $errmsg;
+    }
   .homeHeader {
 
     // position: -webkit-sticky;
@@ -23,10 +26,6 @@ $errmsg: red;
 
     .loginMainComponent {
       display: inline-block;
-
-      .errmsg{
-      color: $errmsg;
-      }
     }
   }
   .carousel-demo .product-item .product-item-content {

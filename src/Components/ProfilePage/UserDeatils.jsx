@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { getUsers } from '../../actions/actions';
+import { getUserRoles, getUsers } from '../../actions/actions';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -20,11 +20,13 @@ function UserDetails() {
 
     useEffect(() => {
         dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+        console.log("......23-users",userDetails)
     }, []);
 
-    const Adduser = () => {
+    const CreateUser = () => {
         setActionType('Add');
         setOpen(true);
+        dispatch(getUserRoles())
     }
 
     const onCloseDialog = () => {
@@ -47,7 +49,7 @@ function UserDetails() {
     const CreatedAt = (rowData) => {
         return (
             <div>
-                {new Date(rowData.createdAt).getDate() + '-' + new Date(rowData.createdAt).getMonth() + 1 + '-' + new Date(rowData.createdAt).getFullYear()}
+                {new Date(rowData.createdAt).getDate() + '-' + new Date(rowData.createdAt).getMonth() + 1 + '-' + new Date(rowData.createdAt*1000).getFullYear()}
             </div>
         )
     }
@@ -55,7 +57,7 @@ function UserDetails() {
     const UpdatedAt = (rowData) => {
         return (
             <div>
-                {new Date(rowData.updatedAt).getDate() + '-' + new Date(rowData.updatedAt).getMonth() + 1 + '-' + new Date(rowData.updatedAt).getFullYear()}
+                {new Date(rowData.updatedAt).getDate() + '-' + new Date(rowData.updatedAt).getMonth() + 1 + '-' + new Date(rowData.updatedAt*1000).getFullYear()}
             </div>
         )
     }
@@ -65,7 +67,7 @@ function UserDetails() {
             <div className='userActions d-flex mb-2'>
                 <div className='serachUser w-75'></div>
                 <div className='addButton w-25'>
-                    <Button icon="pi pi-user-plus" onClick={Adduser} label='Add User' className="p-button-rounded p-button-secondary w-auto" />
+                    <Button icon="pi pi-user-plus" onClick={CreateUser} label='Create User' className="p-button-rounded p-button-secondary w-auto" />
                 </div>
             </div>
             <AddorEditUser
