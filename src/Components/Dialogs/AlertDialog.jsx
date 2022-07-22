@@ -5,34 +5,36 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useSelector,useDispatch } from 'react-redux';
+import { Types } from '../../constants/Types';
 
- function AlertDialog() {
-
+function AlertDialog() {
+  const { modal } = useSelector(state => state);
+  const dispatch = useDispatch();
   const handleClose = () => {
-    //setOpen(false);
+    dispatch({type: Types.ON_CLOSE_ALERT_DIALOG, payload: {...modal, open: false}});
   };
 
   return (
     <div>
       <Dialog
-        open={open}
+        open={modal.open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+        {modal.header}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            {modal.message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>
           <Button onClick={handleClose} autoFocus>
-            Agree
+            ok
           </Button>
         </DialogActions>
       </Dialog>

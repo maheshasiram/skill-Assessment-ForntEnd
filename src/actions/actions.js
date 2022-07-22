@@ -82,7 +82,7 @@ export const getUsers = (token, usersParams) => {
       }
     }
     axiosinstance.get(endPoints.USERS +
-      `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`,
+      `?page=${usersParams.page+1}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`,
       config
     ).then(response => {
       dispatch({ type: Types.GET_USERS, payload: response });

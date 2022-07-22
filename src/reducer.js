@@ -9,7 +9,8 @@ const initialState = {
     isLoginLoading: false,
     userDetails: null,
     createUser: null,
-    usersParams: { page: 1, pageSize: 10, search: '', sortBy: '', orderBy: '' },
+    usersParams: {page: 0, pageSize: 5, search: '', sortBy: '', orderBy: '' },
+    lazyParams: {first: 0, page: 0, rows: 5},
     getUserRoles: null,
     isLoader: false,
     modal: {
@@ -25,7 +26,7 @@ export const reducer = (state = initialState, action) => {
         switch (action.type) {
 
             case Types.HEALTH:
-                console.log("reducer.health", action.payload);
+                //console.log("reducer.health", action.payload);
                 return { ...state, health: action.payload }
 
             case Types.LOGIN:
@@ -33,11 +34,11 @@ export const reducer = (state = initialState, action) => {
                 return { ...state, login: action.payload, decodedtoken: action.payload.data && jwtDecode(action.payload.data.token) }
 
             case Types.IS_LOGIN_LOADING:
-                console.log("......reducer.isLoading", action.payload)
+               // console.log("......reducer.isLoading", action.payload)
                 return { ...state, isLoginLoading: action.payload }
 
             case Types.GET_USERS:
-                console.log("......users-reducer", action.payload)
+                //console.log("......users-reducer", action.payload)
                 return { ...state, userDetails: action.payload }
 
             case Types.CREATE_USER:
@@ -54,6 +55,9 @@ export const reducer = (state = initialState, action) => {
 
                 case Types.ON_SET_LOADER:
                 return { ...state, isLoader: action.payload }
+
+                case Types.ON_PAGE_CHANGE: 
+                return {...state, lazyParams: action.payload}
 
             default:
                 return state;

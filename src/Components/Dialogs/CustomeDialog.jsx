@@ -49,7 +49,7 @@ BootstrapDialogTitle.propTypes = {
 
  function FormDialog(props) {
  
-    const {openDialog, onCloseDialog, actionType, id} = props;
+    const {onCloseDialog, actionType, id} = props;
 
   const handleClose = () => {
     onCloseDialog();
@@ -59,7 +59,7 @@ BootstrapDialogTitle.propTypes = {
     <div>
       <BootstrapDialog
         aria-labelledby="customized-dialog-title"
-        open={openDialog}
+        open={true}
       >
         <BootstrapDialogTitle id="customized-dialog-title"  sx={{backgroundColor: 'gainsboro'}}>
        <b> {actionType == 'Add' ? 'Add User' : 'Edit User'}</b>

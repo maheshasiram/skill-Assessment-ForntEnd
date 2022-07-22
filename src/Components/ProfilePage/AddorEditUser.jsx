@@ -15,11 +15,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { createUser } from "../../actions/actions";
 import _ from 'lodash'
+import { AlertDialog } from "../Dialogs/actiondialog";
 
 function AddorEditUser(props) {
-  const { openDialog, onCloseDialog, actionType } = props;
+  const { onCloseDialog, actionType } = props;
 
-  const { getUserRoles } = useSelector(state => state)
+  const { getUserRoles } = useSelector(state => state);
 
   const dispatch = useDispatch();
 
@@ -54,12 +55,19 @@ function AddorEditUser(props) {
     event.preventDefault();
   };
 
+const onSubmitCreateUser=(values)=>{
+  dispatch(createUser(values,(data)=>{
+    if(data.status === 200){
+      onCloseDialog();
+      dispatch(AlertDialog({
+        status: data.status === 200 && '1', message: data.data.message, onok: () => {}
+      }))
+    }
+    }));
+}
+
   const onSubmitUser = (values) => {
-    dispatch(createUser(values,(data)=>{
-      if(data.status === 200){
-        onCloseDialog();
-      }
-      }));
+    onSubmitCreateUser(values);
   }
 
 
@@ -77,7 +85,6 @@ function AddorEditUser(props) {
   })
   return (
     <FormDialog
-      openDialog={openDialog}
       onCloseDialog={onCloseDialog}
       actionType={actionType}
       id="user-form"

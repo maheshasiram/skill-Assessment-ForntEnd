@@ -1,7 +1,7 @@
 import { Types } from "../../constants/Types"
 
 
-export const AlertDialog=()=>{
+export const AlertDialog=(data)=>{
     return (dispatch) => {
         dispatch({
             type: Types.ON_OPEN_ALERT_DIALOG,
@@ -14,7 +14,7 @@ export const AlertDialog=()=>{
     }
 }
 
-export const ConfirmDialog=()=>{
+export const ConfirmDialog=(data)=>{
     return (dispatch) => {
         dispatch({
             type: Types.ON_OPEN_ALERT_DIALOG,
