@@ -9,11 +9,21 @@ import { useSelector,useDispatch } from 'react-redux';
 import { Types } from '../../constants/Types';
 
 function AlertDialog() {
+
   const { modal } = useSelector(state => state);
+
   const dispatch = useDispatch();
+
   const handleClose = () => {
     dispatch({type: Types.ON_CLOSE_ALERT_DIALOG, payload: {...modal, open: false}});
   };
+
+const onClickOK=()=>{
+  modal.onok();
+  setTimeout(() => {
+    handleClose();
+  }, 200);
+}
 
   return (
     <div>
@@ -32,8 +42,8 @@ function AlertDialog() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
+        {modal.header === 'Confirm' && <Button onClick={handleClose}>cancel</Button>}
+          <Button onClick={onClickOK} autoFocus>
             ok
           </Button>
         </DialogActions>

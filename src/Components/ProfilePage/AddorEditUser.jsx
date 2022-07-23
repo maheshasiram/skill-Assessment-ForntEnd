@@ -13,14 +13,14 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import { createUser } from "../../actions/actions";
+import { createUser, getUsers } from "../../actions/actions";
 import _ from 'lodash'
 import { AlertDialog } from "../Dialogs/actiondialog";
 
 function AddorEditUser(props) {
-  const { onCloseDialog, actionType } = props;
+  const { onCloseDialog, actionType, userDataOnEdit } = props;
 
-  const { getUserRoles } = useSelector(state => state);
+  const { getUserRoles, usersParams } = useSelector(state => state);
 
   const dispatch = useDispatch();
 
@@ -60,7 +60,11 @@ const onSubmitCreateUser=(values)=>{
     if(data.status === 200){
       onCloseDialog();
       dispatch(AlertDialog({
-        status: data.status === 200 && '1', message: data.data.message, onok: () => {}
+        status: data.status === 200 && '1',
+         message: data.data.message,
+          onok: () => {
+            dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+        }
       }))
     }
     }));
@@ -72,12 +76,12 @@ const onSubmitCreateUser=(values)=>{
 
 
   const formik = useFormik({
-    initialValues: {
+    initialValues: actionType == 'Add' ? {
       username: '',
       password: '',
       roleId: '',
       email: '',
-    },
+    }: userDataOnEdit,
     onSubmit: (values) => {
       onSubmitUser(values);
     },
@@ -139,6 +143,7 @@ const onSubmitCreateUser=(values)=>{
               sx={{ width: '17em' }}
               name='roleId'
               variant='outlined'
+              id="roleId"
               label="Select Role"
               value={formik.values.roleId}
               onChange={formik.handleChange}

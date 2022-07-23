@@ -17,9 +17,6 @@ $errmsg: red;
     }
   .homeHeader {
 
-    // position: -webkit-sticky;
-    //   position: sticky;
-    //   top: 0;
     h1 {
       font-family: $fontfamily;
     }
@@ -40,5 +37,13 @@ $errmsg: red;
     width: 50%;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
-                
+}
+
+.userActions{
+cursor: pointer;
+}
+
+.deletedRow{
+filter: blur(0.7px) !important;
+color: #cf7a7a !important;
 }

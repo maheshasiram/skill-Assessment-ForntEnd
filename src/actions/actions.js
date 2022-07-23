@@ -16,14 +16,17 @@ const RefreahToken = (token) => {
   var unixTimeStamp = decodedtoekn && decodedtoekn.exp;
   var date = new Date(unixTimeStamp * 1000);
   const stamp_time = date.getTime() - Date.now()
+
   //setInterval is to call for every given interval of time in milliseconds
   setInterval(() => {
+
     //get Authorization token, set to headers and assigning to config constant
     const config = {
       headers: {
         'Authorization': 'Bearer ' + token,
       }
     }
+
     //post request for REFRESH api 
     //axiosinstance is imported , we decleared baseurl, axios and headers 
     //endpoints is imported, we decleared api end points
@@ -117,6 +120,11 @@ export const createUser = (values, callback) => {
   }
 }
 
+/**
+ * get all roles to create user while creating user
+ * @returns all roles to create user
+ */
+
 export const getUserRoles = () => {
   return function (dispatch) {
     const config = {
@@ -133,4 +141,52 @@ export const getUserRoles = () => {
       })
   }
 }
+
+/**
+ * to delete user 
+ * @param {deleting username} username 
+ * @param {callback after api call} callback 
+ * @returns 
+ */
+
+export const deleteUser = (username, callback) => {
+  return function (dispatch) {
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.delete(endPoints.USER+`/${username}`, config)
+      .then(response => {
+        dispatch({ type: Types.DELETE_USER, payload: response });
+        callback(response);
+      })
+      .catch(err => {
+        dispatch({ type: Types.DELETE_USER, payload: err });
+        callback(err);
+      })
+  }
+}
+
+export const restoreUser = (username, callback) => {
+  return function (dispatch) {
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.put(endPoints.USER+`/${username}/revoke`,null, config)
+      .then(response => {
+        dispatch({ type: Types.DELETE_USER, payload: response });
+        callback(response);
+      })
+      .catch(err => {
+        dispatch({ type: Types.DELETE_USER, payload: err });
+        callback(err);
+      })
+  }
+}
+
+
+
 

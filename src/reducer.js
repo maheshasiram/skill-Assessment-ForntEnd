@@ -13,6 +13,8 @@ const initialState = {
     lazyParams: {first: 0, page: 0, rows: 5},
     getUserRoles: null,
     isLoader: false,
+    deleteUser: null,
+    restoreUser: null,
     modal: {
         header: '',
         status: 0,
@@ -20,7 +22,8 @@ const initialState = {
         message: "",
         onok: () => {},
         onCancel: () => {},
-    }
+    },
+    onEditUser: null,
 }
 export const reducer = (state = initialState, action) => {
         switch (action.type) {
@@ -59,6 +62,14 @@ export const reducer = (state = initialState, action) => {
                 case Types.ON_PAGE_CHANGE: 
                 return {...state, lazyParams: action.payload}
 
+                case Types.DELETE_USER:
+                    return{...state, deleteUser: action.payload}
+
+                    case Types.RESTORE_USER:
+                        return{...state, restoreUser: action.payload}
+
+                        case Types.ON_EDIT_USER: 
+                        return{...state, onEditUser: action.payload}
             default:
                 return state;
         }

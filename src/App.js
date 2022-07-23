@@ -28,7 +28,12 @@ function App() {
         dispatch({ type: Types.HEALTH, payload: err });
       });
 
+      // api call
+        // dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+
+
   }, []);
+
 
   return (
     <div className="App">
@@ -36,6 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path='/usermanagement' element={<Profile /> } />
           <Route path='/servererror' element={<ServerError />} ></Route>
         </Routes>
       </BrowserRouter>
