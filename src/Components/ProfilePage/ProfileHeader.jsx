@@ -16,6 +16,8 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Divider from '@mui/material/Divider';
+import CustomTooltip from "../../ReuseComponents/CustomTooltip/CustomTooltip";
+import jwtDecode from "jwt-decode";
 
 //After successful login Admin redirect to this page
 
@@ -44,30 +46,8 @@ function ProfileHeader() {
 
   return (
     <React.Fragment>
-      
-    {/* // <AppBar position="fixed">
-    //   <Container maxWidth="xl">
-    //     <Toolbar disableGutters> */}
-          
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              flexGrow: 1
-            }}
-          >
-            Skill Assissment
-          </Typography> */}
-        <Tooltip title="Account settings">
+ 
+    <CustomTooltip title="Account Settings">
           <IconButton
             onClick={handleClick}
             size="small"
@@ -76,11 +56,9 @@ function ProfileHeader() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 45, height: 45 }}>M</Avatar>
+            <Avatar sx={{ width: 45, height: 45 }}>{jwtDecode(sessionStorage.getItem('JWTtoken')).username.charAt(0).toUpperCase()}</Avatar>
           </IconButton>
-        </Tooltip>
-      
-          
+          </CustomTooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -142,10 +120,6 @@ function ProfileHeader() {
           Logout
         </MenuItem>
       </Menu>
-    {/* //     </Toolbar>
-    //   </Container>
-    // </AppBar>
-     */}
     </React.Fragment>
   );
 

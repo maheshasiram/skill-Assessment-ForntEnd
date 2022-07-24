@@ -18,7 +18,7 @@ function Home() {
             <div className="homeMianDiv">
                 <div className="logInMainDiv">
                 <div className="homeHeader">
-                <h1> Welcome To Skill Assessment</h1>
+                    <h1> Welcome To Skill Assessment</h1>
                 <Login />
                 </div>
                 <AboutUs />

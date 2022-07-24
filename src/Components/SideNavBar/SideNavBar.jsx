@@ -24,6 +24,12 @@ import Categories from "../Categories/Cateogies";
 import AlertDialog from "../../ReuseComponents/Dialogs/AlertDialog";
 import UserManagement from "../UserManagement/UserManagement";
 import ProfileHeader from "../ProfilePage/ProfileHeader";
+import CustomTooltip from "../../ReuseComponents/CustomTooltip/CustomTooltip";
+import Loader from "../../ReuseComponents/Loader/Loader";
+import PersonIcon from '@mui/icons-material/Person';
+import Avatar from '@mui/material/Avatar';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CategoryIcon from '@mui/icons-material/Category';
 
 const drawerWidth = 240;
 
@@ -105,28 +111,30 @@ function SideNavBar() {
     }
   };
 
-  const onTabClick = (e,tab) => {
-   setActiveTab(tab)
+  const onTabClick = (e, tab) => {
+    setActiveTab(tab)
   };
 
   return (
     <div className="sideNavBar">
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5
-            }}
-          >
-           {!open ? <MenuIcon /> : <CloseOutlinedIcon /> }
-          </IconButton>
-          <Typography variant="h6" noWrap component="div"   sx={{
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed">
+          <Toolbar>
+            <CustomTooltip title={!open ? 'Expand' : 'Close'}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{
+                  marginRight: 5
+                }}
+              >
+                {!open ? <MenuIcon /> : <CloseOutlinedIcon />}
+              </IconButton>
+            </CustomTooltip>
+            <Typography variant="h6" noWrap component="div" sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
@@ -136,56 +144,57 @@ function SideNavBar() {
               textDecoration: 'none',
               flexGrow: 1
             }}>
-           Skill Assissment
-          </Typography>
-          <Box sx={{ justifyContent: 'end' }}>
-          <ProfileHeader />
-          </Box>
-          
-        </Toolbar>
-      </AppBar>
-      <Drawer
-       variant="permanent" open={open} >
-        <DrawerHeader>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {["DashBoard", "Categories", "Configuration", "User Management"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block"}} className={text === activeTab ? activeTab : ''}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5
-                }}
-                onClick={(e)=>onTabClick(e,text)}
-              >
-                <ListItemIcon
+              Skill Assissment
+            </Typography>
+            <Box sx={{ justifyContent: 'end' }}>
+              <ProfileHeader />
+            </Box>
+
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent" open={open} >
+          <DrawerHeader>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {["DashBoard", "Categories", "Configuration", "User Management"].map((text, index) => (
+              <ListItem key={text} disablePadding sx={{ display: "block" }} className={text === activeTab ? activeTab : ''}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center"
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5
                   }}
+                  onClick={(e) => onTabClick(e, text)}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-   <AlertDialog />
-        <DrawerHeader />
-        <div className="content">
-        {activeTab === 'User Management' && <UserDetails />}
-       {activeTab === 'Configuration' && <Configuration /> }
-       {activeTab === 'Categories' && <Categories /> }
-       {activeTab === 'DashBoard' && <UserManagement />}
-        </div>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center"
+                    }}
+                  >
+                    {text === 'User Management' ? <PersonIcon /> : text === 'DashBoard' ? <DashboardIcon /> : text === 'Categories' ? <CategoryIcon /> : <InboxIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <AlertDialog />
+          <Loader />
+          <DrawerHeader />
+          <div className="content">
+            {activeTab === 'User Management' && <UserDetails />}
+            {activeTab === 'Configuration' && <Configuration />}
+            {activeTab === 'Categories' && <Categories />}
+            {activeTab === 'DashBoard' && <UserManagement />}
+          </div>
+        </Box>
       </Box>
-    </Box>
     </div>
   );
 }

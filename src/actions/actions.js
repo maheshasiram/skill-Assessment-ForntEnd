@@ -3,6 +3,7 @@ import jwtDecode from "jwt-decode";
 import axiosinstance from "../axiosinstance";
 import endPoints from "../constants/endPoints";
 import { Types } from "../constants/Types";
+import { onLoader } from "../ReuseComponents/Dialogs/actiondialog";
 import store from "../store";
 
 /**
@@ -16,17 +17,16 @@ const RefreahToken = (token) => {
   var unixTimeStamp = decodedtoekn && decodedtoekn.exp;
   var date = new Date(unixTimeStamp * 1000);
   const stamp_time = date.getTime() - Date.now()
-
+  // let d = new Date(0);
+  // d.setUTCSeconds(unixTimeStamp)
+  // console.log("......20",d)
   //setInterval is to call for every given interval of time in milliseconds
   setInterval(() => {
-
-    //get Authorization token, set to headers and assigning to config constant
     const config = {
       headers: {
         'Authorization': 'Bearer ' + token,
       }
     }
-
     //post request for REFRESH api 
     //axiosinstance is imported , we decleared baseurl, axios and headers 
     //endpoints is imported, we decleared api end points
@@ -80,7 +80,7 @@ export const onSubmitLogin = (values, callback) => {
  */
 export const getUsers = (token, usersParams) => {
   return function (dispatch) {
-
+    dispatch(onLoader(true));
     const config = {
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -91,9 +91,11 @@ export const getUsers = (token, usersParams) => {
       config
     ).then(response => {
       dispatch({ type: Types.GET_USERS, payload: response });
+      dispatch(onLoader(false));
     })
       .catch(err => {
         dispatch({ type: Types.GET_USERS, payload: err });
+        dispatch(onLoader(false));
       })
   }
 }
@@ -105,6 +107,7 @@ export const getUsers = (token, usersParams) => {
  */
 export const createUser = (values, callback) => {
   return function (dispatch) {
+    dispatch(onLoader(true));
     const config = {
       headers: {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
@@ -113,10 +116,12 @@ export const createUser = (values, callback) => {
     axiosinstance.post(endPoints.USER, values, config)
       .then(response => {
         dispatch({ type: Types.CREATE_USER, payload: response });
+        dispatch(onLoader(false));
         callback(response);
       })
       .catch(err => {
         dispatch({ type: Types.CREATE_USER, payload: err });
+        dispatch(onLoader(false));
         callback(err)
       })
   }
@@ -129,6 +134,7 @@ export const createUser = (values, callback) => {
 
 export const getUserRoles = () => {
   return function (dispatch) {
+    dispatch(onLoader(true));
     const config = {
       headers: {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
@@ -137,9 +143,11 @@ export const getUserRoles = () => {
     axiosinstance.get(endPoints.USERROLES, config)
       .then(response => {
         dispatch({ type: Types.GET_USER_ROLES, payload: response });
+        dispatch(onLoader(false));
       })
       .catch(err => {
         dispatch({ type: Types.GET_USER_ROLES, payload: err });
+        dispatch(onLoader(false));
       })
   }
 }
@@ -153,6 +161,7 @@ export const getUserRoles = () => {
 
 export const deleteUser = (username, callback) => {
   return function (dispatch) {
+    dispatch(onLoader(true));
     const config = {
       headers: {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
@@ -162,16 +171,19 @@ export const deleteUser = (username, callback) => {
       .then(response => {
         dispatch({ type: Types.DELETE_USER, payload: response });
         callback(response);
+        dispatch(onLoader(false));
       })
       .catch(err => {
         dispatch({ type: Types.DELETE_USER, payload: err });
         callback(err);
+        dispatch(onLoader(false));
       })
   }
 }
 
 export const restoreUser = (username, callback) => {
   return function (dispatch) {
+    dispatch(onLoader(true));
     const config = {
       headers: {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
@@ -181,10 +193,12 @@ export const restoreUser = (username, callback) => {
       .then(response => {
         dispatch({ type: Types.DELETE_USER, payload: response });
         callback(response);
+        dispatch(onLoader(false));
       })
       .catch(err => {
         dispatch({ type: Types.DELETE_USER, payload: err });
         callback(err);
+        dispatch(onLoader(false));
       })
   }
 }
@@ -194,6 +208,7 @@ export const restoreUser = (username, callback) => {
 
      export const getAllCategories=(categoryParams)=>{
       return function(dispatch){
+        dispatch(onLoader(true));
         const config = {
           headers: {
             'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
@@ -205,10 +220,12 @@ export const restoreUser = (username, callback) => {
       .then(response => {
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: response });
       //  callback(response);
+      dispatch(onLoader(false));
       })
       .catch(err => {
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: err });
        // callback(err);
+       dispatch(onLoader(false));
       })
       }
      }

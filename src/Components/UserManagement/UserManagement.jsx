@@ -1,74 +1,216 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { deleteUser, getUserRoles, getUsers, restoreUser } from '../../actions/actions';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ReplayIcon from '@mui/icons-material/Replay';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import { Button } from "primereact/button";
+import AddorEditUser from '../ProfilePage/AddorEditUser';
+import moment from 'moment';
+import { Types } from '../../constants/Types';
+import { Pagination, Stack } from '@mui/material';
+import { InputText } from 'primereact/inputtext';
+import { AlertDialog, ConfirmDialog } from '../../ReuseComponents/Dialogs/actiondialog';
+import { userdetails } from '../../constants/messages';
+import _ from 'lodash';
+import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+function UserManagement() {
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+    const { userDetails, usersParams, UserRoles } = useSelector(state => state);
+    const [actionType, setActionType] = useState('');
+    const [open, setOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+    const dispatch = useDispatch();
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+    useEffect(() => {
+        dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+        dispatch(getUserRoles())
+    }, []);
 
- function UserManagement() {
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+    const CreateUser = () => {
+        setActionType('Add');
+        setOpen(true);
+    }
+
+    const onCloseDialog = () => {
+        setOpen(false);
+    }
+
+    const onDeleteUser = (e, rowData) => {
+       dispatch(ConfirmDialog({
+        status: '0',
+        message: userdetails.deleteConfirMsg,
+        onok: () => {
+            dispatch(deleteUser(rowData.username,(data) => {
+                if(data.status === 200){
+                    dispatch(AlertDialog({
+                        status: '2',
+                        message: data.data.message,
+                        onok:()=>{
+                            dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+                        }
+                    }))
+                }
+              }))
+      }
+       })) 
+    }
+
+
+    const onRestoreUser = (e, rowData) => {
+        dispatch(ConfirmDialog({
+            status: '0',
+            message: userdetails.restoreConfirmMsg,
+            onok: () => {
+                dispatch(restoreUser(rowData.username,(data) => {
+                    if(data.status === 200){
+                        dispatch(AlertDialog({
+                            status: '2',
+                            message: data.data.message,
+                            onok:()=>{
+                                dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+                            }
+                        }))
+                    }
+                  }))
+          }
+           })) 
+    }
+
+
+    const ActionTempletes = (rowData) => {
+        return (
+            <div className='userActions'>
+                {rowData.active ? <div className='d-inline-flex'>
+                    <CustomTooltip title="Delete User">
+                    <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteUser(e, rowData)} />
+                    </CustomTooltip>
+                    <CustomTooltip title="Delete User">
+                    <LockResetIcon color='action' />
+                    </CustomTooltip>
+                </div> :
+                <CustomTooltip title="Delete User">
+                    <ReplayIcon className='mx-1' color='action' onClick={(e) => onRestoreUser(e, rowData)} />
+                    </CustomTooltip>}
+            </div>
+        )
+    }
+
+    const CreatedAt = (rowData) => {
+        let d = new Date(0);
+        d.setUTCSeconds(rowData.createdAt);
+        return (
+            <div>
+                {moment(d).format('DD-MMM-YYYY hh:mm a')}
+            </div>
+        )
+    }
+
+    const UpdatedAt = (rowData) => {
+        let d = new Date(0);
+        d.setUTCSeconds(rowData.updatedAt);
+        return (
+            <div>
+                {moment(d).format('DD-MMM-YYYY hh:mm a')}
+            </div>
+        )
+    }
+
+    const onPageChange = (e,val) => {
+            setCurrentPage(val)
+            let payload = { ...usersParams, page: val }
+            dispatch({ type: Types.GET_USERS, payload: payload })
+            dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
+    }
+
+    const UserStatus = (rowData) => {
+        return (
+            <div>
+                {rowData.active ? 'Active' : 'Inactive'}
+            </div>
+        )
+    }
+
+    const deletedRow = (rowData) => {
+        return {
+            'deletedRow': rowData.active === false
+        }
+    }
+
+    const onSearchUser=(e)=>{
+        let payload = { ...usersParams, search: e.target.value }
+        dispatch({ type: Types.GET_USERS, payload: payload })
+        dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
+    }
+
+    const UserRole=(rowData)=>{
+        let role = '' ;
+      if(UserRoles && UserRoles.data){
+      _.map(UserRoles.data, (id,index)=>{
+        if(id.id === rowData.roleId){
+            role = id.role
+        }
+      })
+      }
+      return (
+        <div>
+            {role !== '' ? role : 'Admin'}
+        </div>
+      )
+    }
+    
+    return (
+        <div className='userDetails'>
+            <div className='userActions d-flex mb-2 justify-content-end align-items-center'>
+                <div className='serachUser'>
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText placeholder="Search User" onChange={(e)=>onSearchUser(e)} />
+                </span>
+                </div>
+                <div className='addButton mx-2'>
+                    <Button icon="pi pi-user-plus" onClick={CreateUser} label='Create User' className="p-button-rounded p-button-secondary"/>
+                </div>
+            </div>
+            {open && <AddorEditUser
+                actionType={actionType}
+                onCloseDialog={onCloseDialog}
+            />}
+            <div className="userDetailsTable">
+                <div className="card">
+                    {userDetails && userDetails.data && 
+                    <React.Fragment>
+                    <DataTable
+                        value={userDetails.data.data}
+                        responsiveLayout="scroll"
+                        rowHover
+                        stripedRows
+                        rows={5}
+                        emptyMessage="No Users found."
+                        rowClassName={deletedRow}
+                    >
+                        <Column field="username" header="UserName"></Column>
+                        <Column field="email" header="Email"></Column>
+                        <Column header="Role" body={UserRole}></Column>
+                        <Column body={CreatedAt} header="CreatedAt"></Column>
+                        <Column body={UpdatedAt} header="UpdatedAt"></Column>
+                        <Column body={UserStatus} header="Status"></Column>
+                        <Column header="Actions" body={ActionTempletes}></Column>
+                    </DataTable>
+                  {userDetails.data.totalRecords > 5 && <Stack spacing={2} className='my-2 d-flex justify-content-end align-items-center'>
+                    <Pagination variant='outlined' color='secondary' count={ Math.ceil(userDetails.data.totalRecords/5) } showFirstButton showLastButton page={currentPage} onChange= {(e,val)=>onPageChange(e,val)} />
+                    </Stack>}
+                 </React.Fragment>   
+                }
+                </div>
+            </div>
+        
+        </div>
+    )
 }
 
 export default UserManagement;

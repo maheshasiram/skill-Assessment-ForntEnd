@@ -15,7 +15,7 @@ import { InputText } from 'primereact/inputtext';
 import { AlertDialog, ConfirmDialog } from '../../ReuseComponents/Dialogs/actiondialog';
 import { userdetails } from '../../constants/messages';
 import _ from 'lodash';
-
+import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
 
 function UserDetails() {
 
@@ -79,18 +79,23 @@ function UserDetails() {
                   }))
           }
            })) 
-       
     }
 
 
     const ActionTempletes = (rowData) => {
         return (
             <div className='userActions'>
-                {rowData.active ? <div>
+                {rowData.active ? <div className='d-inline-flex'>
+                    <CustomTooltip title="Delete User">
                     <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteUser(e, rowData)} />
+                    </CustomTooltip>
+                    <CustomTooltip title="Delete User">
                     <LockResetIcon color='action' />
+                    </CustomTooltip>
                 </div> :
-                    <ReplayIcon className='mx-1' color='action' onClick={(e) => onRestoreUser(e, rowData)} />}
+                <CustomTooltip title="Delete User">
+                    <ReplayIcon className='mx-1' color='action' onClick={(e) => onRestoreUser(e, rowData)} />
+                    </CustomTooltip>}
             </div>
         )
     }
@@ -204,6 +209,7 @@ function UserDetails() {
                     
                 </div>
             </div>
+        
         </div>
     )
 }
