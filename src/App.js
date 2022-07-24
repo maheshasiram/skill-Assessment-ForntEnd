@@ -10,6 +10,7 @@ import './Components/Styles/Styles.scss';
 import Profile from './Components/ProfilePage/Profile';
 import ServerError from './Components/ServerError/ServerError';
 import store from './store';
+import SideNavBar from './Components/SideNavBar/SideNavBar';
 
 
 function App() {
@@ -40,8 +41,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path='/usermanagement' element={<Profile /> } />
+          <Route path="/admin" element={<SideNavBar />} />
           <Route path='/servererror' element={<ServerError />} ></Route>
         </Routes>
       </BrowserRouter>

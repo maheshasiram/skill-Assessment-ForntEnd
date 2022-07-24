@@ -43,11 +43,13 @@ function ProfileHeader() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
+    <React.Fragment>
+      
+    {/* // <AppBar position="fixed">
+    //   <Container maxWidth="xl">
+    //     <Toolbar disableGutters> */}
+          
+          {/* <Typography
             variant="h6"
             noWrap
             component="a"
@@ -64,8 +66,7 @@ function ProfileHeader() {
             }}
           >
             Skill Assissment
-          </Typography>
-          <Box sx={{ justifyContent: 'end' }}>
+          </Typography> */}
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -78,7 +79,7 @@ function ProfileHeader() {
             <Avatar sx={{ width: 45, height: 45 }}>M</Avatar>
           </IconButton>
         </Tooltip>
-      </Box>
+      
           
       <Menu
         anchorEl={anchorEl}
@@ -141,9 +142,11 @@ function ProfileHeader() {
           Logout
         </MenuItem>
       </Menu>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    {/* //     </Toolbar>
+    //   </Container>
+    // </AppBar>
+     */}
+    </React.Fragment>
   );
 
 }

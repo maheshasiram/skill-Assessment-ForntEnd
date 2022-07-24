@@ -71,6 +71,8 @@ export const onSubmitLogin = (values, callback) => {
   }
 }
 
+     //user Maanagement.......!
+ 
 /**
  * For user details after login
  * @param {JWTtoken} token 
@@ -85,7 +87,7 @@ export const getUsers = (token, usersParams) => {
       }
     }
     axiosinstance.get(endPoints.USERS +
-      `?page=${usersParams.page+1}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`,
+      `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`,
       config
     ).then(response => {
       dispatch({ type: Types.GET_USERS, payload: response });
@@ -188,5 +190,27 @@ export const restoreUser = (username, callback) => {
 }
 
 
+     //--------Catgegories--------
+
+     export const getAllCategories=(categoryParams)=>{
+      return function(dispatch){
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+          }
+        }
+        axiosinstance.get(endPoints.CATEGORIES +
+          `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}&orderBy=${categoryParams.orderBy}`,
+           config)
+      .then(response => {
+        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: response });
+      //  callback(response);
+      })
+      .catch(err => {
+        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: err });
+       // callback(err);
+      })
+      }
+     }
 
 

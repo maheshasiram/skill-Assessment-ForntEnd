@@ -1,5 +1,5 @@
 import React from "react";
-import AlertDialog from "../Dialogs/AlertDialog";
+import AlertDialog from "../../ReuseComponents/Dialogs/AlertDialog";
 import SideNavBar from "../SideNavBar/SideNavBar";
 import AccessTabs from "./AccessTabs";
 import ProfileHeader from "./ProfileHeader";
@@ -8,10 +8,10 @@ function Profile(){
  
   return(
     <React.Fragment>
-      <AlertDialog />
+ 
       {/* <ProfileHeader /> */}
       {/* <AccessTabs /> */}
-      <SideNavBar />
+      {/* <SideNavBar /> */}
     </React.Fragment>
   )
 }

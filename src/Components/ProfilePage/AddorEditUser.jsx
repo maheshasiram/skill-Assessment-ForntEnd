@@ -1,5 +1,5 @@
 import React from "react";
-import FormDialog from "../Dialogs/CustomeDialog";
+import FormDialog from "../../ReuseComponents/Dialogs/CustomeDialog";
 import * as Yup from 'yup';
 import { TextField, Select, MenuItem, FormHelperText, FormControl, InputLabel } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,12 +15,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { createUser, getUsers } from "../../actions/actions";
 import _ from 'lodash'
-import { AlertDialog } from "../Dialogs/actiondialog";
+import { AlertDialog } from "../../ReuseComponents/Dialogs/actiondialog";
 
 function AddorEditUser(props) {
-  const { onCloseDialog, actionType, userDataOnEdit } = props;
+  const { onCloseDialog, actionType } = props;
 
-  const { getUserRoles, usersParams } = useSelector(state => state);
+  const { UserRoles, usersParams } = useSelector(state => state);
 
   const dispatch = useDispatch();
 
@@ -76,12 +76,12 @@ const onSubmitCreateUser=(values)=>{
 
 
   const formik = useFormik({
-    initialValues: actionType == 'Add' ? {
+    initialValues:{
       username: '',
       password: '',
       roleId: '',
       email: '',
-    }: userDataOnEdit,
+    },
     onSubmit: (values) => {
       onSubmitUser(values);
     },
@@ -150,8 +150,8 @@ const onSubmitCreateUser=(values)=>{
               onBlur={formik.handleBlur}
               error={formik.touched.roleId && Boolean(formik.errors.roleId)}
             >
-              {getUserRoles && getUserRoles.data &&
-                _.map(getUserRoles.data, (users, index) =>(
+              {UserRoles && UserRoles.data &&
+                _.map(UserRoles.data, (users, index) =>(
                   <MenuItem key={users.id} value={users.id}>{users.role}</MenuItem>
                 ))}
             </Select>

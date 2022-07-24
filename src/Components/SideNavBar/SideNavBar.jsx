@@ -17,6 +17,13 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import UserDetails from "../ProfilePage/UserDeatils";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { useState } from "react";
+import Configuration from "../Configuration/Configuration";
+import Categories from "../Categories/Cateogies";
+import AlertDialog from "../../ReuseComponents/Dialogs/AlertDialog";
+import UserManagement from "../UserManagement/UserManagement";
+import ProfileHeader from "../ProfilePage/ProfileHeader";
 
 const drawerWidth = 240;
 
@@ -85,9 +92,10 @@ const Drawer = styled(MuiDrawer, {
   })
 }));
 
-export default function MiniDrawer() {
+function SideNavBar() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('User Management');
 
   const handleDrawerOpen = () => {
     if (open) {
@@ -97,11 +105,12 @@ export default function MiniDrawer() {
     }
   };
 
-  // const handleDrawerClose = () => {
-  //   setOpen(false);
-  // };
+  const onTabClick = (e,tab) => {
+   setActiveTab(tab)
+  };
 
   return (
+    <div className="sideNavBar">
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed">
@@ -115,34 +124,41 @@ export default function MiniDrawer() {
               marginRight: 5
             }}
           >
-            <MenuIcon />
+           {!open ? <MenuIcon /> : <CloseOutlinedIcon /> }
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div"   sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+              flexGrow: 1
+            }}>
            Skill Assissment
           </Typography>
+          <Box sx={{ justifyContent: 'end' }}>
+          <ProfileHeader />
+          </Box>
           
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+       variant="permanent" open={open} >
         <DrawerHeader>
-          {/* <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton> */}
         </DrawerHeader>
         <Divider />
         <List>
           {["DashBoard", "Categories", "Configuration", "User Management"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block"}}>
+            <ListItem key={text} disablePadding sx={{ display: "block"}} className={text === activeTab ? activeTab : ''}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5
                 }}
+                onClick={(e)=>onTabClick(e,text)}
               >
                 <ListItemIcon
                   sx={{
@@ -158,12 +174,20 @@ export default function MiniDrawer() {
             </ListItem>
           ))}
         </List>
-       
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+   <AlertDialog />
         <DrawerHeader />
-       <UserDetails />
+        <div className="content">
+        {activeTab === 'User Management' && <UserDetails />}
+       {activeTab === 'Configuration' && <Configuration /> }
+       {activeTab === 'Categories' && <Categories /> }
+       {activeTab === 'DashBoard' && <UserManagement />}
+        </div>
       </Box>
     </Box>
+    </div>
   );
 }
+
+export default SideNavBar;

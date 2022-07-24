@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import AboutUs from "../Helpers/AboutUs/AboutUs";
 import Login from "../Login/Login";
 
-
 function Home() {
     const { health } = useSelector(state => state);
     const navigate = useNavigate();
@@ -17,12 +16,13 @@ function Home() {
 
     return (
             <div className="homeMianDiv">
+                <div className="logInMainDiv">
                 <div className="homeHeader">
                 <h1> Welcome To Skill Assessment</h1>
                 <Login />
                 </div>
-               
                 <AboutUs />
+                </div>
             </div>
 
     )

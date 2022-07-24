@@ -9,9 +9,9 @@ const initialState = {
     isLoginLoading: false,
     userDetails: null,
     createUser: null,
-    usersParams: {page: 0, pageSize: 5, search: '', sortBy: '', orderBy: '' },
+    usersParams: {page: 1, pageSize: 5, search: '', sortBy: '', orderBy: 'asc' },
     lazyParams: {first: 0, page: 0, rows: 5},
-    getUserRoles: null,
+    UserRoles: null,
     isLoader: false,
     deleteUser: null,
     restoreUser: null,
@@ -23,7 +23,8 @@ const initialState = {
         onok: () => {},
         onCancel: () => {},
     },
-    onEditUser: null,
+    allCategories: null,
+    categoryParams: {page: 1, pageSize: 5, search: '', orderBy: 'asc'}
 }
 export const reducer = (state = initialState, action) => {
         switch (action.type) {
@@ -48,7 +49,7 @@ export const reducer = (state = initialState, action) => {
                 return { ...state, createUser: action.payload }
 
             case Types.GET_USER_ROLES:
-                return { ...state, getUserRoles: action.payload }
+                return { ...state, UserRoles: action.payload }
 
                 case Types.ON_OPEN_ALERT_DIALOG:
                 return { ...state, modal: action.payload }
@@ -68,8 +69,9 @@ export const reducer = (state = initialState, action) => {
                     case Types.RESTORE_USER:
                         return{...state, restoreUser: action.payload}
 
-                        case Types.ON_EDIT_USER: 
-                        return{...state, onEditUser: action.payload}
+                        case Types.GET_ALL_CATEGORIES: 
+                        return{...state, allCategories: action.payload}
+
             default:
                 return state;
         }

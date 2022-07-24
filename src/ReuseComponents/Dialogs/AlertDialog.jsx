@@ -20,30 +20,33 @@ function AlertDialog() {
 
 const onClickOK=()=>{
   modal.onok();
-  setTimeout(() => {
     handleClose();
-  }, 200);
 }
 
   return (
-    <div>
+    <div className='alertDialog'>
       <Dialog
         open={modal.open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        style={{width: '35w', zIndex : 0}}
       >
-        <DialogTitle id="alert-dialog-title">
-        {modal.header}
+        <DialogTitle sx={{backgroundColor: 'cadetblue', lineHeight: 1}}>
+      {modal.header} 
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {modal.message}
+          <DialogContentText id="alert-dialog-description" sx={{fontSize: '20px'}} className='d-flex justify-content-center align-items-center px-5 py-4'>
+           <span>
+            <i className={`pi pi-exclamation-triangle exclamation-alert 
+               ${modal.status === 0 ? `text-warning` : modal.status === 2 ? `text-success` : `text-error`} `}></i>
+           </span> 
+           <span className='px-2 justify-content-center d-inline-flex align-items-center'> {modal.message}</span>
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-        {modal.header === 'Confirm' && <Button onClick={handleClose}>cancel</Button>}
-          <Button onClick={onClickOK} autoFocus>
+        <DialogActions sx={{backgroundColor: 'antiquewhite', lineHeight: 1}}>
+        {modal.header === 'Confirm' && <Button variant="contained" color='inherit' onClick={handleClose}>cancel</Button>}
+          <Button sx={{width: '20%'}} variant="contained" color="success" onClick={onClickOK} >
             ok
           </Button>
         </DialogActions>

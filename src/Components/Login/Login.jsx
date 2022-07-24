@@ -73,7 +73,7 @@ function Login() {
       //calling onSubmitLogin function in actions and sending the values and callback function for response after api call
       dispatch(onSubmitLogin(values, (data)=>{
         if(data.status === 200){
-          navigate("/profile");
+          navigate("/admin");
         }
       }))
     }

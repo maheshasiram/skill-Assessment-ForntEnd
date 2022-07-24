@@ -7,6 +7,7 @@ $fontstyle: italic;
 $errmsg: red;
 
 /* Use the variables */
+
 .homeMianDiv {
   background-color: $bgcolor;
   font-style: $fontstyle;
@@ -43,7 +44,46 @@ $errmsg: red;
 cursor: pointer;
 }
 
+.userDetails{
+  filter: drop-shadow(1px 2px 3px);
+}
+
 .deletedRow{
 filter: blur(0.7px) !important;
 color: #cf7a7a !important;
+}
+
+
+  .css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    border-radius: 8px !important;
+  }
+
+  .css-1hsz34s-MuiDrawer-docked .MuiDrawer-paper, .css-2dum1v-MuiDrawer-docked .MuiDrawer-paper{
+    filter: drop-shadow(1px 2px 4px);
+    background-color: gainsboro;
+  }
+
+.DashBoard, .Categories, .Configuration, .Management{
+  background-color: cadetblue !important;
+  color: white !important;
+}
+
+.logInMainDiv{
+  background-image: url('../Helpers/Images/backgroundimg.jpg');
+  background-size: 125%;
+  background-repeat: no-repeat;
+  background-position-x: right;
+}
+  
+  .aboutUs {
+    // background-color: #ffffff;
+    // opacity: 0.6;
+    // color: 0000000;
+    // font-weight: bold;
+    // color: #000000;
+    background-color: rgb(0 0 0 / 10%);
+    opacity: inherit;
+    color: 0;
+    font-weight: bold;
+    color: #141415;
 }

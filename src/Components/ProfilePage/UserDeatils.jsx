@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { deleteUser, getUserRoles, getUsers, restoreUser } from '../../actions/actions';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReplayIcon from '@mui/icons-material/Replay';
 import LockResetIcon from '@mui/icons-material/LockReset';
@@ -11,25 +10,30 @@ import { Button } from "primereact/button";
 import AddorEditUser from './AddorEditUser';
 import moment from 'moment';
 import { Types } from '../../constants/Types';
+import { Pagination, Stack } from '@mui/material';
+import { InputText } from 'primereact/inputtext';
+import { AlertDialog, ConfirmDialog } from '../../ReuseComponents/Dialogs/actiondialog';
+import { userdetails } from '../../constants/messages';
+import _ from 'lodash';
 
 
 function UserDetails() {
 
-    const { userDetails, usersParams, lazyParams } = useSelector(state => state);
+    const { userDetails, usersParams, UserRoles } = useSelector(state => state);
     const [actionType, setActionType] = useState('');
     const [open, setOpen] = useState(false);
-    const [rowData, setRowData] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+        dispatch(getUserRoles())
     }, []);
 
     const CreateUser = () => {
         setActionType('Add');
         setOpen(true);
-        dispatch(getUserRoles())
     }
 
     const onCloseDialog = () => {
@@ -37,32 +41,56 @@ function UserDetails() {
     }
 
     const onDeleteUser = (e, rowData) => {
-        dispatch(deleteUser(rowData.username), (data) => {
-        })
+       dispatch(ConfirmDialog({
+        status: '0',
+        message: userdetails.deleteConfirMsg,
+        onok: () => {
+            dispatch(deleteUser(rowData.username,(data) => {
+                if(data.status === 200){
+                    dispatch(AlertDialog({
+                        status: '2',
+                        message: data.data.message,
+                        onok:()=>{
+                            dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+                        }
+                    }))
+                }
+              }))
+      }
+       })) 
     }
 
 
     const onRestoreUser = (e, rowData) => {
-        dispatch(restoreUser(rowData.username), (data) => {
-        })
+        dispatch(ConfirmDialog({
+            status: '0',
+            message: userdetails.restoreConfirmMsg,
+            onok: () => {
+                dispatch(restoreUser(rowData.username,(data) => {
+                    if(data.status === 200){
+                        dispatch(AlertDialog({
+                            status: '2',
+                            message: data.data.message,
+                            onok:()=>{
+                                dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
+                            }
+                        }))
+                    }
+                  }))
+          }
+           })) 
+       
     }
 
-    const onEditUser = (e, rowData)=>{
-        dispatch(getUserRoles())
-        setActionType('Edit');
-        setOpen(true);
-        setRowData(rowData);
-    }
 
     const ActionTempletes = (rowData) => {
         return (
             <div className='userActions'>
                 {rowData.active ? <div>
-                    <EditIcon onClick={(e) => onEditUser(e, rowData)} />
-                    <DeleteIcon onClick={(e) => onDeleteUser(e, rowData)} />
-                    <LockResetIcon />
+                    <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteUser(e, rowData)} />
+                    <LockResetIcon color='action' />
                 </div> :
-                    <ReplayIcon onClick={(e) => onRestoreUser(e, rowData)} />}
+                    <ReplayIcon className='mx-1' color='action' onClick={(e) => onRestoreUser(e, rowData)} />}
             </div>
         )
     }
@@ -87,20 +115,17 @@ function UserDetails() {
         )
     }
 
-    const onPageChange = (e) => {
-        console.log(".....83", e.page)
-        if (e.page !== usersParams.page) {
-            let payload = { ...usersParams, page: e.page }
-            dispatch({ type: Types.ON_PAGE_CHANGE, payload: e })
+    const onPageChange = (e,val) => {
+            setCurrentPage(val)
+            let payload = { ...usersParams, page: val }
             dispatch({ type: Types.GET_USERS, payload: payload })
             dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
-        }
     }
 
     const UserStatus = (rowData) => {
         return (
             <div>
-                {rowData.active ? 'Active' : 'Disabled'}
+                {rowData.active ? 'Active' : 'Inactive'}
             </div>
         )
     }
@@ -111,45 +136,72 @@ function UserDetails() {
         }
     }
 
+    const onSearchUser=(e)=>{
+        let payload = { ...usersParams, search: e.target.value }
+        dispatch({ type: Types.GET_USERS, payload: payload })
+        dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
+    }
+
+    const UserRole=(rowData)=>{
+        let role = '' ;
+      if(UserRoles && UserRoles.data){
+      _.map(UserRoles.data, (id,index)=>{
+        if(id.id === rowData.roleId){
+            role = id.role
+        }
+      })
+      }
+      return (
+        <div>
+            {role !== '' ? role : 'Admin'}
+        </div>
+      )
+    }
+    
     return (
         <div className='userDetails'>
-            <div className='userActions d-flex mb-2'>
-                <div className='serachUser'></div>
-                <div className='addButton'>
-                    <Button icon="pi pi-user-plus" onClick={CreateUser} label='Create User' className="p-button-rounded p-button-secondary w-auto" />
+            <div className='userActions d-flex mb-2 justify-content-end align-items-center'>
+                <div className='serachUser'>
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText placeholder="Search User" onChange={(e)=>onSearchUser(e)} />
+                </span>
+                </div>
+                <div className='addButton mx-2'>
+                    <Button icon="pi pi-user-plus" onClick={CreateUser} label='Create User' className="p-button-rounded p-button-secondary"/>
                 </div>
             </div>
             {open && <AddorEditUser
                 actionType={actionType}
                 onCloseDialog={onCloseDialog}
-                userDataOnEdit={rowData}
             />}
-            <div className="datatable-templating-demo">
+            <div className="userDetailsTable">
                 <div className="card">
-                    {userDetails && userDetails.data && <DataTable
+                    {userDetails && userDetails.data && 
+                    <React.Fragment>
+                    <DataTable
                         value={userDetails.data.data}
                         responsiveLayout="scroll"
-                        dataKey="roleId"
-                        lazy
-                        stripedRows
                         rowHover
-                        paginator
-                        first={lazyParams.first}
+                        stripedRows
                         rows={5}
-                        totalRecords={userDetails.data.totalRecords}
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                        onPage={(e) => onPageChange(e)}
                         emptyMessage="No Users found."
                         rowClassName={deletedRow}
                     >
                         <Column field="username" header="UserName"></Column>
                         <Column field="email" header="Email"></Column>
+                        <Column header="Role" body={UserRole}></Column>
                         <Column body={CreatedAt} header="CreatedAt"></Column>
                         <Column body={UpdatedAt} header="UpdatedAt"></Column>
                         <Column body={UserStatus} header="Status"></Column>
                         <Column header="Actions" body={ActionTempletes}></Column>
-                    </DataTable>}
+                    </DataTable>
+                  {userDetails.data.totalRecords > 5 && <Stack spacing={2} className='my-2 d-flex justify-content-end align-items-center'>
+                    <Pagination variant='outlined' color='secondary' count={ Math.ceil(userDetails.data.totalRecords/5) } showFirstButton showLastButton page={currentPage} onChange= {(e,val)=>onPageChange(e,val)} />
+                    </Stack>}
+                 </React.Fragment>   
+                }
+                    
                 </div>
             </div>
         </div>

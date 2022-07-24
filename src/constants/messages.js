@@ -1,4 +1,5 @@
 //Userdetails
 export  const userdetails = {
-    confirmdialog: "Are you sure you want to delete user",
+    deleteConfirMsg: "Are you sure you want to delete user ?",
+    restoreConfirmMsg: "Are you sure you want to restore user ?"
 }
