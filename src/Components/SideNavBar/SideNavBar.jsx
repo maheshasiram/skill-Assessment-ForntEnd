@@ -20,7 +20,7 @@ import UserDetails from "../ProfilePage/UserDeatils";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useState } from "react";
 import Configuration from "../Configuration/Configuration";
-import Categories from "../Categories/Cateogies";
+import Categories from "../Categories/Categoies";
 import AlertDialog from "../../ReuseComponents/Dialogs/AlertDialog";
 import UserManagement from "../UserManagement/UserManagement";
 import ProfileHeader from "../ProfilePage/ProfileHeader";

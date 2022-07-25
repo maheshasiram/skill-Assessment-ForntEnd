@@ -9,6 +9,7 @@ const endPoints={
     USERROLES: "user/roles",
     REFRESH: "token/refresh",
     CATEGORIES: "categories",
+    CATEGORY: "caterory",
 } 
 
 export default endPoints;

@@ -24,7 +24,8 @@ const initialState = {
         onCancel: () => {},
     },
     allCategories: null,
-    categoryParams: {page: 1, pageSize: 5, search: '', orderBy: 'asc'}
+    categoryParams: {page: 1, pageSize: 5, search: '', orderBy: 'asc'},
+    createCategory: null,
 }
 export const reducer = (state = initialState, action) => {
         switch (action.type) {
@@ -71,6 +72,9 @@ export const reducer = (state = initialState, action) => {
 
                         case Types.GET_ALL_CATEGORIES: 
                         return{...state, allCategories: action.payload}
+
+                        case Types.CREATE_CATEGORY:
+                            return {...state, createCategory: action.payload}
 
             default:
                 return state;

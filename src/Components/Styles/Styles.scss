@@ -87,3 +87,22 @@ color: #cf7a7a !important;
     font-weight: bold;
     color: #141415;
 }
+
+.userDetails{
+  .p-datatable {
+    .p-datatable-thead > tr > th{
+      background-color: #213a55d4;
+      color: white;
+      border-left: 0.5px solid rgba(224, 224, 224, 1);
+      padding: 0.6rem;
+    }
+    .p-datatable-tbody > tr > td{
+      border-left: 0.5px solid #9eaede69;
+      padding: 0.7rem;
+    }
+  }
+
+  .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd{
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}

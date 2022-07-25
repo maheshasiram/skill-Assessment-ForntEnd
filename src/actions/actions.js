@@ -71,8 +71,8 @@ export const onSubmitLogin = (values, callback) => {
   }
 }
 
-     //user Maanagement.......!
- 
+//user Maanagement.......!
+
 /**
  * For user details after login
  * @param {JWTtoken} token 
@@ -167,7 +167,7 @@ export const deleteUser = (username, callback) => {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
-    axiosinstance.delete(endPoints.USER+`/${username}`, config)
+    axiosinstance.delete(endPoints.USER + `/${username}`, config)
       .then(response => {
         dispatch({ type: Types.DELETE_USER, payload: response });
         callback(response);
@@ -180,6 +180,13 @@ export const deleteUser = (username, callback) => {
       })
   }
 }
+
+/**
+ * to restore user
+ * @param {username} username 
+ * @param {callback} callback 
+ * @returns 
+ */
 
 export const restoreUser = (username, callback) => {
   return function (dispatch) {
@@ -189,7 +196,7 @@ export const restoreUser = (username, callback) => {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
-    axiosinstance.put(endPoints.USER+`/${username}/revoke`,null, config)
+    axiosinstance.put(endPoints.USER + `/${username}/revoke`, null, config)
       .then(response => {
         dispatch({ type: Types.DELETE_USER, payload: response });
         callback(response);
@@ -204,30 +211,56 @@ export const restoreUser = (username, callback) => {
 }
 
 
-     //--------Catgegories--------
+//--------Catgegories--------
 
-     export const getAllCategories=(categoryParams)=>{
-      return function(dispatch){
-        dispatch(onLoader(true));
-        const config = {
-          headers: {
-            'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
-          }
-        }
-        axiosinstance.get(endPoints.CATEGORIES +
-          `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}&orderBy=${categoryParams.orderBy}`,
-           config)
+
+
+export const getAllCategories = (categoryParams) => {
+  return function (dispatch) {
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.get(endPoints.CATEGORIES +
+      `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}&orderBy=${categoryParams.orderBy}`,
+      config)
       .then(response => {
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: response });
-      //  callback(response);
-      dispatch(onLoader(false));
+        //  callback(response);
+        dispatch(onLoader(false));
       })
       .catch(err => {
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: err });
-       // callback(err);
-       dispatch(onLoader(false));
+        // callback(err);
+        dispatch(onLoader(false));
       })
+  }
+}
+
+
+export const onAddCategory = ( ) => {
+  return function (dispatch) {
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
-     }
-
-
+    }
+    axiosinstance.post(endPoints.CATEGORY, {
+      "author": "admin",
+      "category": "go"
+    }, config)
+      .then(response => {
+        dispatch({ type: Types.CREATE_CATEGORY, payload: response });
+        dispatch(onLoader(false));
+       // callback(response);
+      })
+      .catch(err => {
+        dispatch({ type: Types.CREATE_CATEGORY, payload: err });
+        dispatch(onLoader(false));
+       // callback(err)
+      })
+  }
+}
