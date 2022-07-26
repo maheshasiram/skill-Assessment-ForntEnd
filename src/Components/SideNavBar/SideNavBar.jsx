@@ -15,7 +15,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import UserDetails from "../ProfilePage/UserDeatils";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useState } from "react";
@@ -30,6 +29,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import Avatar from '@mui/material/Avatar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from '@mui/icons-material/Category';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
 const drawerWidth = 240;
 
@@ -175,7 +175,7 @@ function SideNavBar() {
                       justifyContent: "center"
                     }}
                   >
-                    {text === 'User Management' ? <PersonIcon /> : text === 'DashBoard' ? <DashboardIcon /> : text === 'Categories' ? <CategoryIcon /> : <InboxIcon />}
+                    {text === 'User Management' ? <PersonIcon /> : text === 'DashBoard' ? <DashboardIcon /> : text === 'Categories' ? <CategoryIcon /> : <SettingsSuggestIcon />}
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>

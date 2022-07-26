@@ -76,14 +76,8 @@ color: #cf7a7a !important;
 }
   
   .aboutUs {
-    // background-color: #ffffff;
-    // opacity: 0.6;
-    // color: 0000000;
-    // font-weight: bold;
-    // color: #000000;
     background-color: rgb(0 0 0 / 10%);
     opacity: inherit;
-    color: 0;
     font-weight: bold;
     color: #141415;
 }
@@ -94,11 +88,11 @@ color: #cf7a7a !important;
       background-color: #213a55d4;
       color: white;
       border-left: 0.5px solid rgba(224, 224, 224, 1);
-      padding: 0.6rem;
+      padding: 0.7rem;
     }
     .p-datatable-tbody > tr > td{
       border-left: 0.5px solid #9eaede69;
-      padding: 0.7rem;
+      padding: 0.5rem;
     }
   }
 

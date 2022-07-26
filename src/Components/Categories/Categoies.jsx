@@ -36,6 +36,12 @@ const onCloseDialog = () =>{
         dispatch(onAddCategory())
     }
 
+    const onSearchCategory=(e)=>{
+        let payload = { ...categoryParams, search: e.target.value }
+        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: payload })
+        dispatch(getAllCategories(payload));
+    }
+
     return (
         <div className='userDetails'>
             {/* {console.log(".....27-allCategories", allCategories.data.data)} */}
@@ -43,7 +49,7 @@ const onCloseDialog = () =>{
                 <div className='serachUser'>
                     <span className="p-input-icon-left">
                         <i className="pi pi-search" />
-                        {/* <InputText placeholder="Search User" onChange={(e)=>onSearchUser(e)} /> */}
+                        <InputText placeholder="Search Category" onChange={(e)=>onSearchCategory(e)} />
                     </span>
                 </div>
                 <div className='addButton mx-2'>
@@ -67,8 +73,8 @@ const onCloseDialog = () =>{
                                 emptyMessage="No Categories found."
                             //rowClassName={deletedRow}
                             >
-                                <Column field="username" header="UserName"></Column>
-                                <Column field="email" header="Email"></Column>
+                                <Column field="category" header="Category"></Column>
+                                <Column field="CreatedAt" header="CreatedAt"></Column>
                                 {/* <Column header="Role" body={UserRole}></Column>
                   <Column body={CreatedAt} header="CreatedAt"></Column>
                   <Column body={UpdatedAt} header="UpdatedAt"></Column>
