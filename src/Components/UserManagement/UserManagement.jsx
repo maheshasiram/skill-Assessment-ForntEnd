@@ -89,11 +89,11 @@ function UserManagement() {
                     <CustomTooltip title="Delete User">
                     <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteUser(e, rowData)} />
                     </CustomTooltip>
-                    <CustomTooltip title="Delete User">
+                    <CustomTooltip title="Reset User">
                     <LockResetIcon color='action' />
                     </CustomTooltip>
                 </div> :
-                <CustomTooltip title="Delete User">
+                <CustomTooltip title="Restore User">
                     <ReplayIcon className='mx-1' color='action' onClick={(e) => onRestoreUser(e, rowData)} />
                     </CustomTooltip>}
             </div>

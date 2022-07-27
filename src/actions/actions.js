@@ -240,7 +240,7 @@ export const getAllCategories = (categoryParams) => {
 }
 
 
-export const onAddCategory = ( ) => {
+export const onAddCategory = (values,callback) => {
   return function (dispatch) {
     dispatch(onLoader(true));
     const config = {
@@ -248,19 +248,16 @@ export const onAddCategory = ( ) => {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
-    axiosinstance.post(endPoints.CATEGORY, {
-      "author": "admin",
-      "category": "go"
-    }, config)
+    axiosinstance.post(endPoints.CATEGORY, values, config)
       .then(response => {
         dispatch({ type: Types.CREATE_CATEGORY, payload: response });
         dispatch(onLoader(false));
-       // callback(response);
+       callback(response);
       })
       .catch(err => {
         dispatch({ type: Types.CREATE_CATEGORY, payload: err });
         dispatch(onLoader(false));
-       // callback(err)
+        callback(err)
       })
   }
 }

@@ -70,10 +70,6 @@ const onSubmitCreateUser=(values)=>{
     }));
 }
 
-  const onSubmitUser = (values) => {
-    onSubmitCreateUser(values);
-  }
-
 
   const formik = useFormik({
     initialValues:{
@@ -83,7 +79,7 @@ const onSubmitCreateUser=(values)=>{
       email: '',
     },
     onSubmit: (values) => {
-      onSubmitUser(values);
+      onSubmitCreateUser(values);
     },
     validationSchema: CreateUserSchema,
   })
