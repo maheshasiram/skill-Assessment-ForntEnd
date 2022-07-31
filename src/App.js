@@ -7,7 +7,6 @@ import endPoints from './constants/endPoints';
 import { useDispatch } from 'react-redux';
 import { Types } from './constants/Types';
 import './Components/Styles/Styles.scss';
-import Profile from './Components/ProfilePage/Profile';
 import ServerError from './Components/ServerError/ServerError';
 import store from './store';
 import SideNavBar from './Components/SideNavBar/SideNavBar';

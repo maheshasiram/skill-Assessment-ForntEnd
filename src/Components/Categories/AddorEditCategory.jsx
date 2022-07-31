@@ -1,16 +1,15 @@
 import React from "react";
 import FormDialog from "../../ReuseComponents/Dialogs/CustomeDialog";
 import * as Yup from 'yup';
-import { TextField, Select, MenuItem, FormHelperText, FormControl, InputLabel } from '@mui/material';
+import { TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { Box } from '@mui/material';
-
 import { AlertDialog } from "../../ReuseComponents/Dialogs/actiondialog";
-import { onAddCategory, getAllCategories } from "../../actions/actions";
+import { onAddCategory, getAllCategories, updateCategory } from "../../actions/actions";
 
 function AddorEditCategory(props){
-    const { onCloseDialog, actionType } = props;
+    const { onCloseDialog, actionType, editCategory } = props;
 
     const { categoryParams } = useSelector(state => state);
   
@@ -25,11 +24,12 @@ function AddorEditCategory(props){
     });
   
     const onSubmitCategory = (values) => {
+      if(actionType == 'Add'){
      dispatch(onAddCategory(values, (data)=>{
       if(data.status === 201){
         onCloseDialog();
         dispatch(AlertDialog({
-          status: data.status === 200 && '1',
+          status: data.status === 201 && '1',
            message: data.data.message,
             onok: () => {
               dispatch(getAllCategories(categoryParams))
@@ -37,17 +37,34 @@ function AddorEditCategory(props){
         }))
       }
      }));
+    }else{
+      dispatch(updateCategory(editCategory.id, values, (data)=>{
+        if(data.status === 200){
+          onCloseDialog();
+          dispatch(AlertDialog({
+            status: data.status === 200 && '1',
+             message: data.data.message,
+              onok: () => {
+                dispatch(getAllCategories(categoryParams))
+            }
+          }))
+        }
+      }))
+    }
     }
   
-  
+   
     const formik = useFormik({
-      initialValues:{
+      initialValues:actionType == 'Add' ?{
         author: '',
         category: ''
+      }: {
+        author: editCategory.author,
+        category: editCategory.category
       },
 
       onSubmit: (values) => {
-        onSubmitCategory(values);
+          onSubmitCategory(values);
       },
       validationSchema: CreateUserSchema,
     })

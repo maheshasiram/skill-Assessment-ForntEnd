@@ -86,8 +86,10 @@ export const getUsers = (token, usersParams) => {
         'Authorization': 'Bearer ' + token,
       }
     }
+    const params = usersParams.sortBy == '' ? `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`:
+     `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}&sortBy=${usersParams.sortBy}&orderBy=${usersParams.orderBy}`
     axiosinstance.get(endPoints.USERS +
-      `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`,
+      params,
       config
     ).then(response => {
       dispatch({ type: Types.GET_USERS, payload: response });
@@ -213,7 +215,11 @@ export const restoreUser = (username, callback) => {
 
 //--------Catgegories--------
 
-
+/**
+ * To get All Categories
+ * @param {pageno, pagesize, search, orderBy} categoryParams 
+ * @returns All Catrgories
+ */
 
 export const getAllCategories = (categoryParams) => {
   return function (dispatch) {
@@ -223,23 +229,29 @@ export const getAllCategories = (categoryParams) => {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
+    const params = categoryParams.sortBy == '' ? `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}`:
+    `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}&orderBy=${categoryParams.orderBy}`
     axiosinstance.get(endPoints.CATEGORIES +
-      `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}&orderBy=${categoryParams.orderBy}`,
+      params,
       config)
       .then(response => {
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: response });
-        //  callback(response);
         dispatch(onLoader(false));
       })
       .catch(err => {
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: err });
-        // callback(err);
         dispatch(onLoader(false));
       })
   }
 }
 
 
+/**
+ * To add new Category
+ * @param {Author, Category} values 
+ * @param {call method after api call} callback 
+ * @returns Adds new category
+ */
 export const onAddCategory = (values,callback) => {
   return function (dispatch) {
     dispatch(onLoader(true));
@@ -258,6 +270,65 @@ export const onAddCategory = (values,callback) => {
         dispatch({ type: Types.CREATE_CATEGORY, payload: err });
         dispatch(onLoader(false));
         callback(err)
+      })
+  }
+}
+
+/**
+ * to delete Category 
+ * @param {deleting Category} Category 
+ * @param {callback after api call} callback 
+ * @returns 
+ */
+
+ export const deleteCategory = (id, callback) => {
+  return function (dispatch) {
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.delete(endPoints.CATEGORY + `/${id}`, config)
+      .then(response => {
+        dispatch({ type: Types.DELETE_CATEGORY, payload: response });
+        callback(response);
+        dispatch(onLoader(false));
+      })
+      .catch(err => {
+        dispatch({ type: Types.DELETE_CATEGORY, payload: err });
+        callback(err);
+        dispatch(onLoader(false));
+      })
+  }
+}
+
+/**
+ * To update category
+ * @param {updated category id} id 
+ * @param {category} values 
+ * @param {call back after api call} callback 
+ * @returns updated category
+ */
+
+ export const updateCategory = (id, values, callback) => {
+  return function (dispatch) {
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.put(endPoints.CATEGORY + `/${id}`, {"category": values.category}, config)
+      .then(response => {
+        dispatch({ type: Types.UPDATE_CATEGORY, payload: response });
+        callback(response);
+        dispatch(onLoader(false));
+      })
+      .catch(err => {
+        dispatch({ type: Types.UPDATE_CATEGORY, payload: err });
+        callback(err);
+        dispatch(onLoader(false));
       })
   }
 }

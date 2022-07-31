@@ -21,7 +21,7 @@ import jwtDecode from "jwt-decode";
 
 //After successful login Admin redirect to this page
 
-function ProfileHeader() {
+function ApplicationHeader() {
 
   // set useNavigate Hook to const navigate
 
@@ -125,7 +125,7 @@ function ProfileHeader() {
 
 }
 
-export default ProfileHeader;
+export default ApplicationHeader;
 
 
 

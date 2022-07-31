@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReplayIcon from '@mui/icons-material/Replay';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import { Button } from "primereact/button";
-import AddorEditUser from '../ProfilePage/AddorEditUser';
+import AddorEditUser from './AddorEditUser';
 import moment from 'moment';
 import { Types } from '../../constants/Types';
 import { Pagination, Stack } from '@mui/material';
@@ -19,7 +19,7 @@ import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
 
 function UserManagement() {
 
-    const { userDetails, usersParams, UserRoles } = useSelector(state => state);
+    const { userDetails, usersParams, UserRoles, lazyParams } = useSelector(state => state);
     const [actionType, setActionType] = useState('');
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -83,8 +83,17 @@ function UserManagement() {
 
 
     const ActionTempletes = (rowData) => {
+        let role = '' ;
+        if(UserRoles && UserRoles.data){
+        _.map(UserRoles.data, (id,index)=>{
+          if(id.id === rowData.roleId){
+              role = id.role
+          }
+        })
+        }
         return (
-            <div className='userActions'>
+            <React.Fragment>
+            {role != '' && <div className='userActions'>
                 {rowData.active ? <div className='d-inline-flex'>
                     <CustomTooltip title="Delete User">
                     <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteUser(e, rowData)} />
@@ -96,7 +105,8 @@ function UserManagement() {
                 <CustomTooltip title="Restore User">
                     <ReplayIcon className='mx-1' color='action' onClick={(e) => onRestoreUser(e, rowData)} />
                     </CustomTooltip>}
-            </div>
+            </div>}
+            </React.Fragment>
         )
     }
 
@@ -162,6 +172,13 @@ function UserManagement() {
         </div>
       )
     }
+
+    const onSort = (e) =>{
+        let payload = { ...usersParams, sortBy: e.sortField, orderBy: usersParams.orderBy === 'asc' ? 'desc' : 'asc' }
+         dispatch({ type: Types.GET_USERS, payload: payload })
+         dispatch({type: Types.ON_SORT_FIELD, payload: e})
+         dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
+    }
     
     return (
         <div className='userDetails'>
@@ -169,7 +186,7 @@ function UserManagement() {
                 <div className='serachUser'>
                 <span className="p-input-icon-left">
                     <i className="pi pi-search" />
-                    <InputText placeholder="Search User" onChange={(e)=>onSearchUser(e)} />
+                    <InputText className='searchField' placeholder="Search User" onChange={(e)=>onSearchUser(e)} />
                 </span>
                 </div>
                 <div className='addButton mx-2'>
@@ -192,13 +209,16 @@ function UserManagement() {
                         rows={5}
                         emptyMessage="No Users found."
                         rowClassName={deletedRow}
+                        onSort={onSort}
+                        sortField={lazyParams.sortField} 
+                        sortOrder={lazyParams.sortOrder}
                     >
-                        <Column field="username" header="UserName"></Column>
-                        <Column field="email" header="Email"></Column>
-                        <Column header="Role" body={UserRole}></Column>
-                        <Column body={CreatedAt} header="CreatedAt"></Column>
-                        <Column body={UpdatedAt} header="UpdatedAt"></Column>
-                        <Column body={UserStatus} header="Status"></Column>
+                        <Column field="username" header="UserName" sortable></Column>
+                        <Column field="email" header="Email" sortable></Column>
+                        <Column header="Role" body={UserRole} sortable></Column>
+                        <Column body={CreatedAt} header="CreatedAt" sortable></Column>
+                        <Column body={UpdatedAt} header="UpdatedAt" sortable></Column>
+                        <Column body={UserStatus} header="Status" sortable></Column>
                         <Column header="Actions" body={ActionTempletes}></Column>
                     </DataTable>
                   {userDetails.data.totalRecords > 5 && <Stack spacing={2} className='my-2 d-flex justify-content-end align-items-center'>

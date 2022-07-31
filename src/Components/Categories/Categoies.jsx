@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { getAllCategories, onAddCategory } from '../../actions/actions';
+import { getAllCategories, deleteCategory, updateCategory } from '../../actions/actions';
 import { Button } from "primereact/button";
 import { Types } from '../../constants/Types';
 import { Pagination, Stack } from '@mui/material';
@@ -13,13 +13,16 @@ import { useDispatch, useSelector } from "react-redux";
 import AddorEditCategory from "./AddorEditCategory";
 import moment from 'moment';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { userdetails } from "../../constants/messages";
+import EditIcon from '@mui/icons-material/Edit';
 
 function Categories() {
-    const { categoryParams, allCategories } = useSelector(state => state);
+    const { categoryParams, allCategories, lazyParams } = useSelector(state => state);
     const dispatch = useDispatch();
     const [actionType, setActionType] = useState('');
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [editCategory, setEditCategory] = useState(null);
 
     useEffect(() => {
         dispatch(getAllCategories(categoryParams))
@@ -55,12 +58,12 @@ function Categories() {
         )
     }
 
-    const onPageChange = (e,val) => {
+    const onPageChange = (e, val) => {
         setCurrentPage(val)
         let payload = { ...categoryParams, page: val }
         dispatch({ type: Types.GET_ALL_CATEGORIES, payload: payload })
         dispatch(getAllCategories(payload));
-}
+    }
 
     const onSearchCategory = (e) => {
         let payload = { ...categoryParams, search: e.target.value }
@@ -68,36 +71,50 @@ function Categories() {
         dispatch(getAllCategories(payload));
     }
 
-    // const onDeleteCategory = (e, rowData) => {
-    //     dispatch(ConfirmDialog({
-    //      status: '0',
-    //      message: userdetails.deleteConfirMsg,
-    //      onok: () => {
-    //          dispatch(deleteUser(rowData.username,(data) => {
-    //              if(data.status === 200){
-    //                  dispatch(AlertDialog({
-    //                      status: '2',
-    //                      message: data.data.message,
-    //                      onok:()=>{
-    //                          dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
-    //                      }
-    //                  }))
-    //              }
-    //            }))
-    //    }
-    //     })) 
-    //  }
+    const onDeleteCategory = (e, rowData) => {
+        dispatch(ConfirmDialog({
+            status: '0',
+            message: userdetails.deleteConfirMsg,
+            onok: () => {
+                dispatch(deleteCategory(rowData.id, (data) => {
+                    if (data.status === 200) {
+                        dispatch(AlertDialog({
+                            status: '2',
+                            message: data.data.message,
+                            onok: () => {
+                                dispatch(getAllCategories(categoryParams));
+                            }
+                        }))
+                    }
+                }))
+            }
+        }))
+    }
+
+    const onEditCategory = (e, rowData) => {
+        setActionType('Update');
+        setOpen(true);
+        setEditCategory(rowData)
+    }
 
     const ActionTempletes = (rowData) => {
         return (
             <div className='userActions'>
-
-               <CustomTooltip title="Delete Category">
-                {/* <DeleteIcon  color='action' onClick={(e) => onDeleteCategory(e, rowData)}  /> */}
-                </CustomTooltip>  
-                
+                <CustomTooltip title="Delete Category">
+                    <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteCategory(e, rowData)} />
+                </CustomTooltip>
+                <CustomTooltip title="Edit Category" >
+                    <EditIcon color='action' onClick={(e) => onEditCategory(e, rowData)} />
+                </CustomTooltip>
             </div>
         )
+    }
+
+    const onSort = (e) => {
+        let payload = { ...categoryParams, sortBy: e.sortField, orderBy: categoryParams.orderBy === 'asc' ? 'desc' : 'asc' }
+        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: payload })
+        dispatch({ type: Types.ON_SORT_FIELD, payload: e })
+        dispatch(getAllCategories(payload));
     }
 
     return (
@@ -106,7 +123,7 @@ function Categories() {
                 <div className='serachUser'>
                     <span className="p-input-icon-left">
                         <i className="pi pi-search" />
-                        <InputText placeholder="Search Category" onChange={(e) => onSearchCategory(e)} />
+                        <InputText className="searchField" placeholder="Search Category" onChange={(e) => onSearchCategory(e)} />
                     </span>
                 </div>
                 <div className='addButton mx-2'>
@@ -116,6 +133,7 @@ function Categories() {
             {open && <AddorEditCategory
                 actionType={actionType}
                 onCloseDialog={onCloseDialog}
+                editCategory={editCategory}
             />}
             <div className="userDetailsTable">
                 <div className="card">
@@ -128,14 +146,17 @@ function Categories() {
                                 stripedRows
                                 rows={5}
                                 emptyMessage="No Categories found."
+                                onSort={onSort}
+                                sortField={lazyParams.sortField}
+                                sortOrder={lazyParams.sortOrder}
                             >
-                                <Column field="category" header="Category"></Column>
-                                <Column body={CreatedAt} header="CreatedAt"></Column>
-                                <Column body={UpdatedAt} header="UpdatedAt"></Column>
+                                <Column field="category" header="Category" sortable></Column>
+                                <Column body={CreatedAt} header="CreatedAt" sortable></Column>
+                                <Column body={UpdatedAt} header="UpdatedAt" sortable></Column>
                                 <Column header="Actions" body={ActionTempletes}></Column>
                             </DataTable>
                             {allCategories.data.totalRecords > 5 && <Stack spacing={2} className='my-2 d-flex justify-content-end align-items-center'>
-                                <Pagination variant='outlined' color='secondary' count={ Math.ceil(allCategories.data.totalRecords/5) } showFirstButton showLastButton page={currentPage} onChange= {(e,val)=>onPageChange(e,val)} />
+                                <Pagination variant='outlined' color='secondary' count={Math.ceil(allCategories.data.totalRecords / 5)} showFirstButton showLastButton page={currentPage} onChange={(e, val) => onPageChange(e, val)} />
                             </Stack>}
                         </React.Fragment>
                     }

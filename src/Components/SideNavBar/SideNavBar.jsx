@@ -15,14 +15,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import UserDetails from "../ProfilePage/UserDeatils";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useState } from "react";
 import Configuration from "../Configuration/Configuration";
 import Categories from "../Categories/Categoies";
 import AlertDialog from "../../ReuseComponents/Dialogs/AlertDialog";
 import UserManagement from "../UserManagement/UserManagement";
-import ProfileHeader from "../ProfilePage/ProfileHeader";
+import ProfileHeader from "./ApplicationHeader";
 import CustomTooltip from "../../ReuseComponents/CustomTooltip/CustomTooltip";
 import Loader from "../../ReuseComponents/Loader/Loader";
 import PersonIcon from '@mui/icons-material/Person';
@@ -30,6 +29,7 @@ import Avatar from '@mui/material/Avatar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from '@mui/icons-material/Category';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import DashBoard from "../DashBoard/DashBoard";
 
 const drawerWidth = 240;
 
@@ -188,10 +188,10 @@ function SideNavBar() {
           <Loader />
           <DrawerHeader />
           <div className="content">
-            {activeTab === 'User Management' && <UserDetails />}
+            {activeTab === 'User Management' && <UserManagement />}
             {activeTab === 'Configuration' && <Configuration />}
             {activeTab === 'Categories' && <Categories />}
-            {activeTab === 'DashBoard' && <UserManagement />}
+            {activeTab === 'DashBoard' && <DashBoard />}
           </div>
         </Box>
       </Box>

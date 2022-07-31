@@ -1,7 +1,8 @@
 /* Define standard variables and values for website */
 $bgcolor: #E7EBF0;
 $textcolor: darkblue;
-$fontsize: 14px;
+$fontheading: 16px;
+$fontdata: 14px;
 $fontfamily: fantasy;
 $fontstyle: italic;
 $errmsg: red;
@@ -89,14 +90,25 @@ color: #cf7a7a !important;
       color: white;
       border-left: 0.5px solid rgba(224, 224, 224, 1);
       padding: 0.7rem;
+      font-size: $fontheading;
     }
     .p-datatable-tbody > tr > td{
       border-left: 0.5px solid #9eaede69;
       padding: 0.5rem;
+      font-size: $fontdata;
     }
   }
 
   .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd{
     background-color: rgba(0, 0, 0, 0.04);
   }
+
+  .searchField{
+    font-size: $fontdata;
+  }
+
+  .addButton button{
+font-size: $fontdata;
+  }
+  
 }
