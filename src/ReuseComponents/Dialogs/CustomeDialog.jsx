@@ -6,9 +6,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -49,7 +46,7 @@ BootstrapDialogTitle.propTypes = {
 
  function FormDialog(props) {
  
-    const {onCloseDialog, actionType, id} = props;
+    const {onCloseDialog, actionType, id, title} = props;
 
   const handleClose = () => {
     onCloseDialog();
@@ -62,7 +59,7 @@ BootstrapDialogTitle.propTypes = {
         open={true}
       >
         <BootstrapDialogTitle id="customized-dialog-title"  sx={{backgroundColor: 'gainsboro'}}>
-       <b> {actionType == 'Add' ? 'Add User' : 'Edit User'}</b>
+       <b> {title}</b>
         </BootstrapDialogTitle>
         <DialogContent dividers>
         {props.children}

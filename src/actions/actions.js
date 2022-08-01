@@ -86,7 +86,7 @@ export const getUsers = (token, usersParams) => {
         'Authorization': 'Bearer ' + token,
       }
     }
-    const params = usersParams.sortBy == '' ? `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`:
+    const params = usersParams.sortBy === '' ? `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}`:
      `?page=${usersParams.page}&pageSize=${usersParams.pageSize}&search=${usersParams.search}&sortBy=${usersParams.sortBy}&orderBy=${usersParams.orderBy}`
     axiosinstance.get(endPoints.USERS +
       params,
@@ -212,6 +212,27 @@ export const restoreUser = (username, callback) => {
   }
 }
 
+export const resetPassword=(user, pswd, callback)=>{
+  return function (dispatch) {
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.put(endPoints.USER + `/${user}/password`, pswd , config)
+      .then(response => {
+        // dispatch({ type: Types.DELETE_USER, payload: response });
+         callback(response);
+         dispatch(onLoader(false));
+      })
+      .catch(err => {
+       // dispatch({ type: Types.DELETE_USER, payload: err });
+        callback(err);
+        dispatch(onLoader(false));
+      })
+  }
+}
 
 //--------Catgegories--------
 
@@ -229,7 +250,7 @@ export const getAllCategories = (categoryParams) => {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
-    const params = categoryParams.sortBy == '' ? `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}`:
+    const params = categoryParams.sortBy === '' ? `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}`:
     `?page=${categoryParams.page}&pageSize=${categoryParams.pageSize}&search=${categoryParams.search}&orderBy=${categoryParams.orderBy}`
     axiosinstance.get(endPoints.CATEGORIES +
       params,
@@ -319,7 +340,7 @@ export const onAddCategory = (values,callback) => {
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
-    axiosinstance.put(endPoints.CATEGORY + `/${id}`, {"category": values.category}, config)
+    axiosinstance.put(endPoints.CATEGORY + `/${id}`, values, config)
       .then(response => {
         dispatch({ type: Types.UPDATE_CATEGORY, payload: response });
         callback(response);
@@ -332,3 +353,4 @@ export const onAddCategory = (values,callback) => {
       })
   }
 }
+

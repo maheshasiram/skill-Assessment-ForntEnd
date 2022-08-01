@@ -16,6 +16,7 @@ import { AlertDialog, ConfirmDialog } from '../../ReuseComponents/Dialogs/action
 import { userdetails } from '../../constants/messages';
 import _ from 'lodash';
 import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
+import ResetPassword from './ResetPassword';
 
 function UserManagement() {
 
@@ -23,6 +24,8 @@ function UserManagement() {
     const [actionType, setActionType] = useState('');
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [resetPasswordForm, setResetPasswordForm] = useState(false);
+    const [user, setUser] = useState('');
 
     const dispatch = useDispatch();
 
@@ -38,6 +41,7 @@ function UserManagement() {
 
     const onCloseDialog = () => {
         setOpen(false);
+        setResetPasswordForm(false);
     }
 
     const onDeleteUser = (e, rowData) => {
@@ -81,6 +85,11 @@ function UserManagement() {
            })) 
     }
 
+    const onResetPassword =(e, rowData)=>{
+        setActionType('Submit');
+        setResetPasswordForm(true);
+        setUser(rowData.username);
+    }
 
     const ActionTempletes = (rowData) => {
         let role = '' ;
@@ -93,13 +102,13 @@ function UserManagement() {
         }
         return (
             <React.Fragment>
-            {role != '' && <div className='userActions'>
+            {role !== '' && <div className='userActions'>
                 {rowData.active ? <div className='d-inline-flex'>
                     <CustomTooltip title="Delete User">
                     <DeleteIcon className='mx-1' color='action' onClick={(e) => onDeleteUser(e, rowData)} />
                     </CustomTooltip>
-                    <CustomTooltip title="Reset User">
-                    <LockResetIcon color='action' />
+                    <CustomTooltip title="Reset Password">
+                    <LockResetIcon color='action' onClick={(e)=>onResetPassword(e, rowData)} />
                     </CustomTooltip>
                 </div> :
                 <CustomTooltip title="Restore User">
@@ -193,10 +202,17 @@ function UserManagement() {
                     <Button icon="pi pi-user-plus" onClick={CreateUser} label='Create User' className="p-button-rounded p-button-secondary"/>
                 </div>
             </div>
+            
             {open && <AddorEditUser
                 actionType={actionType}
                 onCloseDialog={onCloseDialog}
             />}
+            
+            {resetPasswordForm && <ResetPassword 
+            actionType={actionType}
+            onCloseDialog={onCloseDialog}
+            user={user}
+            /> }
             <div className="userDetailsTable">
                 <div className="card">
                     {userDetails && userDetails.data && 
