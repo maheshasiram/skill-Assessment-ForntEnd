@@ -46,7 +46,7 @@ cursor: pointer;
 }
 
 .userDetails{
-  filter: drop-shadow(1px 2px 3px);
+  // filter: drop-shadow(0px 0px 1px);
 }
 
 .deletedRow{
@@ -64,7 +64,7 @@ color: #cf7a7a !important;
     background-color: gainsboro;
   }
 
-.DashBoard, .Categories, .Configuration, .Management{
+.DashBoard, .Categories, .Configuration, .Management, .Questions{
   background-color: cadetblue !important;
   color: white !important;
 }

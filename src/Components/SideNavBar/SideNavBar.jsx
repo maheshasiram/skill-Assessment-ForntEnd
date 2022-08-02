@@ -30,6 +30,10 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from '@mui/icons-material/Category';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import DashBoard from "../DashBoard/DashBoard";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Questions from "../Questions/Questions";
+import QuizIcon from '@mui/icons-material/Quiz';
 
 const drawerWidth = 240;
 
@@ -99,6 +103,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function SideNavBar() {
+
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('User Management');
@@ -158,7 +163,7 @@ function SideNavBar() {
           </DrawerHeader>
           <Divider />
           <List>
-            {["DashBoard", "Categories", "Configuration", "User Management"].map((text, index) => (
+            {["DashBoard", "Categories", "Configuration", "User Management", "Questions"].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ display: "block" }} className={text === activeTab ? activeTab : ''}>
                 <ListItemButton
                   sx={{
@@ -175,7 +180,7 @@ function SideNavBar() {
                       justifyContent: "center"
                     }}
                   >
-                    {text === 'User Management' ? <PersonIcon /> : text === 'DashBoard' ? <DashboardIcon /> : text === 'Categories' ? <CategoryIcon /> : <SettingsSuggestIcon />}
+                    {text === 'User Management' ? <PersonIcon /> : text === 'DashBoard' ? <DashboardIcon /> : text === 'Categories' ? <CategoryIcon /> : text === 'Configuration' ? <SettingsSuggestIcon /> : <QuizIcon />}
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
@@ -192,6 +197,7 @@ function SideNavBar() {
             {activeTab === 'Configuration' && <Configuration />}
             {activeTab === 'Categories' && <Categories />}
             {activeTab === 'DashBoard' && <DashBoard />}
+            {activeTab === 'Questions' && <Questions />}
           </div>
         </Box>
       </Box>

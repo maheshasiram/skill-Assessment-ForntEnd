@@ -61,13 +61,13 @@ function Categories() {
     const onPageChange = (e, val) => {
         setCurrentPage(val)
         let payload = { ...categoryParams, page: val }
-        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: payload })
+        dispatch({ type: Types.CATEGORY_PARAMS, payload: payload })
         dispatch(getAllCategories(payload));
     }
 
     const onSearchCategory = (e) => {
         let payload = { ...categoryParams, search: e.target.value }
-        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: payload })
+        dispatch({ type: Types.CATEGORY_PARAMS, payload: payload })
         dispatch(getAllCategories(payload));
     }
 
@@ -111,14 +111,16 @@ function Categories() {
     }
 
     const onSort = (e) => {
+        console.log("e....",e)
         let payload = { ...categoryParams, sortBy: e.sortField, orderBy: categoryParams.orderBy === 'asc' ? 'desc' : 'asc' }
-        dispatch({ type: Types.GET_ALL_CATEGORIES, payload: payload })
+        dispatch({ type: Types.CATEGORY_PARAMS, payload: payload })
         dispatch({ type: Types.ON_SORT_FIELD, payload: e })
         dispatch(getAllCategories(payload));
     }
 
     return (
         <div className='userDetails'>
+            <h2 className='text-left'>Categories</h2>
             <div className='userActions d-flex mb-2 justify-content-end align-items-center'>
                 <div className='serachUser'>
                     <span className="p-input-icon-left">

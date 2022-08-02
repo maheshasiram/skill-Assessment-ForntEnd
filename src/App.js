@@ -21,17 +21,13 @@ function App() {
    * to hit the url to check application health.
    */
   useEffect(() => {
+
     axiosinstance.get(endPoints.HEALTH)
       .then(response => {
         dispatch({ type: Types.HEALTH, payload: response });
       }).catch(err => {
         dispatch({ type: Types.HEALTH, payload: err });
       });
-
-      // api call
-        // dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
-
-
   }, []);
 
 

@@ -47,6 +47,9 @@ export const reducer = (state = initialState, action) => {
             //console.log("......users-reducer", action.payload)
             return { ...state, userDetails: action.payload }
 
+        case Types.USER_PARAMS:
+            return { ...state, usersParams: action.payload }
+
         case Types.CREATE_USER:
             return { ...state, createUser: action.payload }
 
@@ -73,6 +76,9 @@ export const reducer = (state = initialState, action) => {
 
         case Types.GET_ALL_CATEGORIES:
             return { ...state, allCategories: action.payload }
+
+        case Types.CATEGORY_PARAMS:
+            return { ...state, categoryParams: action.payload }
 
         case Types.CREATE_CATEGORY:
             return { ...state, createCategory: action.payload }

@@ -354,3 +354,10 @@ export const onAddCategory = (values,callback) => {
   }
 }
 
+//------Questions------!
+
+
+export const getQuestions=()=>{
+
+}
+

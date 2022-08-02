@@ -142,7 +142,7 @@ function UserManagement() {
     const onPageChange = (e,val) => {
             setCurrentPage(val)
             let payload = { ...usersParams, page: val }
-            dispatch({ type: Types.GET_USERS, payload: payload })
+            dispatch({ type: Types.USER_PARAMS, payload: payload })
             dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
     }
 
@@ -162,7 +162,7 @@ function UserManagement() {
 
     const onSearchUser=(e)=>{
         let payload = { ...usersParams, search: e.target.value }
-        dispatch({ type: Types.GET_USERS, payload: payload })
+        dispatch({ type: Types.USER_PARAMS, payload: payload })
         dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
     }
 
@@ -184,13 +184,14 @@ function UserManagement() {
 
     const onSort = (e) =>{
         let payload = { ...usersParams, sortBy: e.sortField, orderBy: usersParams.orderBy === 'asc' ? 'desc' : 'asc' }
-         dispatch({ type: Types.GET_USERS, payload: payload })
+         dispatch({ type: Types.USER_PARAMS, payload: payload })
          dispatch({type: Types.ON_SORT_FIELD, payload: e})
          dispatch(getUsers(sessionStorage.getItem('JWTtoken'), payload));
     }
     
     return (
         <div className='userDetails'>
+            <h2 className='text-left'>User Management</h2>
             <div className='userActions d-flex mb-2 justify-content-end align-items-center'>
                 <div className='serachUser'>
                 <span className="p-input-icon-left">
@@ -221,6 +222,7 @@ function UserManagement() {
                         value={userDetails.data.data}
                         responsiveLayout="scroll"
                         rowHover
+                        lazy
                         stripedRows
                         rows={5}
                         emptyMessage="No Users found."
@@ -231,10 +233,10 @@ function UserManagement() {
                     >
                         <Column field="username" header="UserName" sortable></Column>
                         <Column field="email" header="Email" sortable></Column>
-                        <Column header="Role" body={UserRole} sortable></Column>
-                        <Column body={CreatedAt} header="CreatedAt" sortable></Column>
-                        <Column body={UpdatedAt} header="UpdatedAt" sortable></Column>
-                        <Column body={UserStatus} header="Status" sortable></Column>
+                        <Column field="role" header="Role" body={UserRole} ></Column>
+                        <Column body={CreatedAt} field="createdAt" header="CreatedAt" sortable></Column>
+                        <Column body={UpdatedAt} field="updatedAt" header="UpdatedAt" sortable></Column>
+                        <Column body={UserStatus} field="Status" header="Status"></Column>
                         <Column header="Actions" body={ActionTempletes}></Column>
                     </DataTable>
                   {userDetails.data.totalRecords > 5 && <Stack spacing={2} className='my-2 d-flex justify-content-end align-items-center'>
