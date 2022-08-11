@@ -72,6 +72,7 @@ function AddorEditCategory(props){
       <FormDialog
         onCloseDialog={onCloseDialog}
         actionType={actionType}
+        title={actionType}
         id="category-form"
       >
   

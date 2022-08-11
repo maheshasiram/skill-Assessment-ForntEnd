@@ -87,6 +87,7 @@ const onSubmitCreateUser=(values)=>{
     <FormDialog
       onCloseDialog={onCloseDialog}
       actionType={actionType}
+      title={actionType}
       id="user-form"
     >
 
