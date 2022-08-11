@@ -1,5 +1,5 @@
 import React from "react";
-import FormDialog from "../../ReuseComponents/Dialogs/CustomeDialog";
+import FormDialog from "../../ReuseComponents/Dialogs/FormDialog";
 import * as Yup from 'yup';
 import { TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ function AddorEditCategory(props){
     });
   
     const onSubmitCategory = (values) => {
-      if(actionType == 'Add'){
+      if(actionType === 'Add'){
      dispatch(onAddCategory(values, (data)=>{
       if(data.status === 201){
         onCloseDialog();
@@ -55,7 +55,7 @@ function AddorEditCategory(props){
   
    
     const formik = useFormik({
-      initialValues:actionType == 'Add' ?{
+      initialValues:actionType === 'Add' ?{
         author: '',
         category: ''
       }: {

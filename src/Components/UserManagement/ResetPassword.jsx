@@ -1,5 +1,5 @@
 import React from 'react';
-import FormDialog from "../../ReuseComponents/Dialogs/CustomeDialog";
+import FormDialog from "../../ReuseComponents/Dialogs/FormDialog";
 import * as Yup from 'yup';
 import { TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';

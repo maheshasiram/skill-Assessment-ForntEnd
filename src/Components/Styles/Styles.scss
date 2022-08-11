@@ -118,13 +118,16 @@ $errmsg: red;
   .addButton button {
     font-size: $fontdata;
   }
-
 }
-
 
 .questionsComponent {
   .unAssignedMsg {
     background-color: aqua;
     padding: 2%;
   }
+
+}
+
+.ql-editor{
+  min-height: 180px;
 }
