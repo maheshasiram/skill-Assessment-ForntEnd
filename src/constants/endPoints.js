@@ -10,6 +10,7 @@ const endPoints={
     REFRESH: "/token/refresh",
     CATEGORIES: "/categories",
     CATEGORY: "/category",
+    QUESTION: "/question",
 } 
 
 export default endPoints;

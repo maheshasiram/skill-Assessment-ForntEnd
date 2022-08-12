@@ -361,3 +361,25 @@ export const getQuestions=()=>{
 
 }
 
+export const addQuestion=(values)=>{
+  return function (dispatch){
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.post(`/go/`+endPoints.QUESTION, values, config)
+      .then(response => {
+        // dispatch({ type: Types.CREATE_USER, payload: response });
+        // dispatch(onLoader(false));
+        // callback(response);
+      })
+      .catch(err => {
+        // dispatch({ type: Types.CREATE_USER, payload: err });
+        // dispatch(onLoader(false));
+        // callback(err)
+      })
+  }
+}
+

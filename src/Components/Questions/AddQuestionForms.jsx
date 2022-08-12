@@ -7,54 +7,40 @@ import { InputText } from 'primereact/inputtext';
 import { Editor } from 'primereact/editor';
 import { Checkbox } from 'primereact/checkbox';
 import { useState } from 'react';
-import { Dropdown } from 'primereact/dropdown';
 import { RadioButton } from 'primereact/radiobutton';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import _ from 'lodash';
+import { addQuestion } from '../../actions/actions';
 
 function AddQuestionForms(props) {
     const { onCloseDialog, actionType } = props;
+    const questionTypes = ['Radio','CheckBox'];
+    const [selectedType, setSelectedType] = useState(questionTypes[0]);
     const [optAnswer, setOptAnswer] = useState([]);
-    const [selectedCity1, setSelectedCity1] = useState(null);
 
-    const onCityChange = (e) => {
-        setSelectedCity1(e.value);
-    }
     const dispatch = useDispatch();
 
     const CreateQuestionSchema = Yup.object().shape({
         question: Yup.string()
             .required('Question is required'),
-        opt1: Yup.string()
-            .required('Please enter option'),
-        opt2: Yup.string()
-            .required('Please enter option'),
-        opt3: Yup.string()
-            .required('Please enter option'),
-        opt4: Yup.string()
-            .required('Please enter option'),
-
+       
     });
 
     const onSubmitQuestion = (values) => {
         console.log("....values", values)
+        let questionObj = _.cloneDeep(values);
+        questionObj.answer = optAnswer.toString();
+        questionObj.author = "admin"
+        questionObj.deleted = false
+        questionObj.deletedBy = 'admin'
+       dispatch(addQuestion(questionObj))
     }
 
-    const formik = useFormik({
-        initialValues: {
-            question: '',
-            opt1: '',
-            opt2: '',
-            opt3: '',
-            opt4: '',
-            answer: optAnswer.length > 0 ? optAnswer.toString() : optAnswer,
-            questionType: null,
-        },
-
-        onSubmit: (values) => {
-            onSubmitQuestion(values);
-        },
-        validationSchema: CreateQuestionSchema,
-    })
-
+    
     const onAnswerChange = (e) => {
         let selectedOptions = [...optAnswer];
         if (e.checked) {
@@ -66,6 +52,22 @@ function AddQuestionForms(props) {
         }
     }
 
+    const formik = useFormik({
+        initialValues: {
+            question: '',
+            options: [],
+            answer: null,
+            questionType: selectedType,
+            marks: '1',
+        },
+
+        onSubmit: (values) => {
+            onSubmitQuestion(values);
+        },
+        validationSchema: CreateQuestionSchema,
+    })
+
+
     return (
 
         <FormDialog
@@ -75,7 +77,7 @@ function AddQuestionForms(props) {
             id="Question-form"
         >
             <form id="Question-form" onSubmit={formik.handleSubmit} className="my-2 mx-2">
-                <h6>Question</h6>
+                <h6>Question :</h6>
                 <Editor
                     value={formik.values.question}
                     name='question'
@@ -84,73 +86,62 @@ function AddQuestionForms(props) {
                     onChange={formik.handleChange}
                 />
                 {formik.touched.question && formik.errors.question && <div className='text-danger'>{formik.errors.question}</div>}
-              <div className='d-block'>
-              <label>Answer Type</label>
-             
-              </div>
+                <div className='d-flex mt-3'>
+                    <label>Question Type :</label>
+                    {
+                        questionTypes.map((qType,i) => {
+                            return (
+                                <div key={i} className="field-radiobutton mx-3">
+                                    <RadioButton inputId={i} name="questionType" value={qType} onChange={(e) => setSelectedType(e.value)} checked={selectedType === qType} />
+                                    <label htmlFor={i}>{qType}</label>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+                <Box sx={{ minWidth: 120 }}>
+                    <label>Marks :</label>
+                    <FormControl sx={{ m: 1, width: '100%' }} size="small">
+                        <InputLabel id="marks">Marks</InputLabel>
+                        <Select
+                            id="marks"
+                            value={formik.values.marks}
+                            label="marks"
+                            name='marks'
+                            onChange={formik.handleChange}
+                        >
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
                 <div className='d-block mt-2'>
-                    <label>Options</label>
-                    <div className='d-flex align-items-center mt-1'>
-                        <label htmlFor="opt1" >1.</label>
-                        <InputText
-                            value={formik.values.opt1}
-                            name='opt1'
-                            className='w-100'
-                            id='opt1'
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        <div className="field-checkbox ml-2">
-                            <Checkbox inputId="ans1" name="answer" value={formik.values.opt1} disabled={!formik.values.opt1 ? true : false} checked={optAnswer.indexOf(formik.values.opt1) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
+                    <h6>Options :</h6>
+                    {[...Array(4)].map((item,i)=>{
+                        return(
+                            <div key={i} className='d-flex align-items-center mt-2'>
+                            <label htmlFor="options[i]" >{i+1}.</label>
+                            <InputText
+                                value={formik.values.options[i]}
+                                name={`options.${i}`}
+                                className='w-100'
+                                id={`options.${i}`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            <div className="field-checkbox ml-2">
+                                <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
+                            </div>
                         </div>
-                    </div>
-                    {formik.touched.opt1 && formik.errors.opt1 && <div className='text-danger'>{formik.errors.opt1}</div>}
-                    <div className='d-flex align-items-center mt-2'>
-                        <label htmlFor="opt2">2.</label>
-                        <InputText
-                            value={formik.values.opt2}
-                            name='opt2'
-                            id='opt2'
-                            className='w-100'
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        <div className="field-checkbox ml-2">
-                            <Checkbox inputId="ans2" name="answer" value={formik.values.opt2} disabled={!formik.values.opt2 ? true : false} checked={optAnswer.indexOf(formik.values.opt2) !== -1} onChange={onAnswerChange} /><span>Answer</span>
-                        </div>
-                    </div>
-                    {formik.touched.opt2 && formik.errors.opt2 && <div className='text-danger'>{formik.errors.opt2}</div>}
-                    <div className='d-flex align-items-center mt-2'>
-                        <label htmlFor="opt2">3.</label>
-                        <InputText
-                            value={formik.values.opt3}
-                            name='opt3'
-                            className='w-100'
-                            id='opt3'
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        <div className="field-checkbox ml-2">
-                            <Checkbox inputId="ans3" name="answer" value={formik.values.opt3} disabled={!formik.values.opt3 ? true : false} checked={optAnswer.indexOf(formik.values.opt3) !== -1} onChange={onAnswerChange} /><span>Answer</span>
-                        </div>
-                    </div>
-                    {formik.touched.opt3 && formik.errors.opt3 && <div className='text-danger'>{formik.errors.opt3}</div>}
+                        )
+       
+                    })
+                }
+                     {/* {formik.touched.options[i] && formik.errors.options[i] && <div className='text-danger'>{formik.errors.options[i]}</div>} */}
 
-                    <div className='d-flex align-items-center mt-2'>
-                        <label htmlFor="opt2">4.</label>
-                        <InputText
-                            value={formik.values.opt4}
-                            name='opt4'
-                            id='opt4'
-                            className='w-100'
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        <div className="field-checkbox ml-2">
-                            <Checkbox inputId="ans4" name="answer" value={formik.values.opt4} disabled={!formik.values.opt4 ? true : false} checked={optAnswer.indexOf(formik.values.opt4) !== -1} onChange={onAnswerChange} /><span>Answer</span>
-                        </div>
-                    </div>
-                    {formik.touched.opt4 && formik.errors.opt4 && <div className='text-danger'>{formik.errors.opt4}</div>}
                 </div>
             </form>
         </FormDialog>
