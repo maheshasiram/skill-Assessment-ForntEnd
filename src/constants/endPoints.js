@@ -11,6 +11,7 @@ const endPoints={
     CATEGORIES: "/categories",
     CATEGORY: "/category",
     QUESTION: "/question",
+    QUESTIONS: "/questions"
 } 
 
 export default endPoints;

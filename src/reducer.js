@@ -27,6 +27,7 @@ const initialState = {
     createCategory: null,
     deleteCategory: null,
     updatedCategory: null,
+    getAllQuestions: null,
 }
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -88,6 +89,9 @@ export const reducer = (state = initialState, action) => {
 
         case Types.UPDATE_CATEGORY:
             return { ...state, updatedCategory: action.payload }
+
+            case Types.GET_ALL_QUESTIONS:
+        return{...state, getAllQuestions: action.payload}
 
         default:
             return state;

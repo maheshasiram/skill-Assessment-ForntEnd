@@ -358,10 +358,26 @@ export const onAddCategory = (values,callback) => {
 
 
 export const getQuestions=()=>{
-
+return function(dispatch){
+  dispatch(onLoader(true));
+  const config = {
+    headers: {
+      'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+    }
+  }
+  axiosinstance.get(`/go`+endPoints.QUESTIONS, config)
+  .then(response=>{
+    dispatch({ type: Types.GET_ALL_QUESTIONS, payload: response });
+    dispatch(onLoader(false));
+  })
+  .catch(err=>{
+    dispatch({ type: Types.GET_ALL_QUESTIONS, payload: err });
+    dispatch(onLoader(false));
+  })
+}
 }
 
-export const addQuestion=(values)=>{
+export const addQuestion=(values,callback)=>{
   return function (dispatch){
     dispatch(onLoader(true));
     const config = {
@@ -369,16 +385,16 @@ export const addQuestion=(values)=>{
         'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
       }
     }
-    axiosinstance.post(`/go/`+endPoints.QUESTION, values, config)
+    axiosinstance.post(`/go`+endPoints.QUESTION, values, config)
       .then(response => {
         // dispatch({ type: Types.CREATE_USER, payload: response });
-        // dispatch(onLoader(false));
-        // callback(response);
+         dispatch(onLoader(false));
+         callback(response);
       })
       .catch(err => {
         // dispatch({ type: Types.CREATE_USER, payload: err });
-        // dispatch(onLoader(false));
-        // callback(err)
+         dispatch(onLoader(false));
+         callback(err)
       })
   }
 }
