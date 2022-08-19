@@ -18,6 +18,7 @@ import _ from 'lodash';
 import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
 import ResetPassword from './ResetPassword';
 
+
 function UserManagement() {
 
     const { userDetails, usersParams, UserRoles, lazyParams } = useSelector(state => state);
@@ -200,7 +201,7 @@ function UserManagement() {
                 </span>
                 </div>
                 <div className='addButton mx-2'>
-                    <Button icon="pi pi-user-plus" onClick={CreateUser} label='Create User' className="p-button-rounded p-button-secondary"/>
+                    <Button icon="pi pi-user-plus" style={{background: 'linear-gradient(0deg, #3f9bb4 0%, #3a8ea5 100%)'}} onClick={CreateUser} label='Create User' className="p-button-rounded "/>
                 </div>
             </div>
             

@@ -11,9 +11,11 @@ import { useState } from 'react';
 import { RadioButton } from 'primereact/radiobutton';
 import _ from 'lodash';
 import { addQuestion, getQuestions } from '../../actions/actions';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+// import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import jwtDecode from "jwt-decode";
 import { AlertDialog } from '../../ReuseComponents/Dialogs/actiondialog';
+import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
 
 function AddQuestionForms(props) {
     const { onCloseDialog, actionType } = props;
@@ -21,6 +23,7 @@ function AddQuestionForms(props) {
     const [selectedType, setSelectedType] = useState(questionTypes[0]);
     const [optAnswer, setOptAnswer] = useState([]);
     const [addOptionErr, setAddOptionErr] = useState(null);
+    const [optionValue, setOptionValue] = useState(null);
 
     const dispatch = useDispatch();
 
@@ -117,6 +120,7 @@ function AddQuestionForms(props) {
                     </div>
 
                     <div>
+                        <label>Marks :</label>
                         <InputNumber
                             inputId="integeronly"
                             value={formik.values.marks}
@@ -131,11 +135,20 @@ function AddQuestionForms(props) {
                                 const options = formik.values.options
                                 return (
                                     <div>
-                                        <label htmlFor="options">Options : <AddCircleOutlineIcon onClick={() => {
-                                            arrayHelpers.push({ value: "" })
-                                        }} /> </label>
+                                        <label htmlFor="options">Options :
+                                            <CustomTooltip title='Add option'>
+                                                <AddCircleIcon sx={{ cursor: 'pointer' }} color='action' onClick={() => {
+                                                    if (optionValue !== 0) {
+                                                        arrayHelpers.push({ value: "" })
+                                                    } else {
+                                                        setAddOptionErr('Please Enter Blank Option')
+                                                    }
 
-                                        {options && options.length > 0 ? options.map((user, i) => (
+                                                }} />
+                                            </CustomTooltip>
+                                        </label>
+                                        {addOptionErr && addOptionErr}
+                                        {options && options.length > 0 ? options.map((opt, i) => (
                                             <div key={i}>
                                                 <div className='d-flex align-items-center mt-2'>
                                                     <label htmlFor="options" >{i + 1}.</label>
@@ -146,17 +159,22 @@ function AddQuestionForms(props) {
                                                         id={`options.${i}.value`}
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
+                                                        onKeyUp={()=>setAddOptionErr(null)}
                                                     />
                                                     <div className="field-checkbox ml-2">
                                                         <Checkbox inputId="answer" name="answer" value={formik.values.options[i].value} disabled={!formik.values.options[i].value ? true : false} checked={optAnswer.indexOf(formik.values.options[i].value) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
                                                     </div>
-                                                    {i > 0 && <i className='pi pi-minus-circle' onClick={() => { arrayHelpers.remove(i) }}></i>}
+                                                    <div>
+                                                        {i > 0 && <CustomTooltip title='Remove option'><i className='pi pi-minus-circle' style={{ cursor: 'pointer' }} onClick={() => { arrayHelpers.remove(i) }}></i></CustomTooltip>}
+                                                    </div>
                                                 </div>
-                                                <div className='align-items-center'>
+                                                <div className='text-danger'>
                                                     <ErrorMessage name={`options.${i}.value`} />
                                                 </div>
+                                                {setOptionValue(opt.value.length)}
                                             </div>
-                                        )) : ''}
+                                        )) : null}
+                                        
                                     </div>
                                 )
                             }}
