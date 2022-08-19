@@ -31,10 +31,10 @@ function AddQuestionForms(props) {
         question: Yup.string()
             .required('Question is required'),
         options: Yup.array().of(
-            Yup.object().shape({
-                value: Yup.string()
+            // Yup.object().shape({
+                 Yup.string()
                     .required('please enter option in text field')
-            })
+            // })
         )
     });
 
@@ -73,7 +73,7 @@ function AddQuestionForms(props) {
     const formik = useFormik({
         initialValues: {
             question: '',
-            options: [{ value: "" }],
+            options: [""],
             answer: null,
             questionType: selectedType,
             marks: 1,
@@ -87,7 +87,6 @@ function AddQuestionForms(props) {
 
 
     return (
-
         <FormDialog
             onCloseDialog={onCloseDialog}
             actionType={actionType}
@@ -139,7 +138,7 @@ function AddQuestionForms(props) {
                                             <CustomTooltip title='Add option'>
                                                 <AddCircleIcon sx={{ cursor: 'pointer' }} color='action' onClick={() => {
                                                     if (optionValue !== 0) {
-                                                        arrayHelpers.push({ value: "" })
+                                                        arrayHelpers.push("")
                                                     } else {
                                                         setAddOptionErr('Please Enter Blank Option')
                                                     }
@@ -153,16 +152,16 @@ function AddQuestionForms(props) {
                                                 <div className='d-flex align-items-center mt-2'>
                                                     <label htmlFor="options" >{i + 1}.</label>
                                                     <InputText
-                                                        value={formik.values.options[i].value}
-                                                        name={`options.${i}.value`}
+                                                        value={formik.values.options[i]}
+                                                        name={`options.${i}`}
                                                         className='w-100'
-                                                        id={`options.${i}.value`}
+                                                        id={`options.${i}`}
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
                                                         onKeyUp={()=>setAddOptionErr(null)}
                                                     />
                                                     <div className="field-checkbox ml-2">
-                                                        <Checkbox inputId="answer" name="answer" value={formik.values.options[i].value} disabled={!formik.values.options[i].value ? true : false} checked={optAnswer.indexOf(formik.values.options[i].value) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
+                                                        <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
                                                     </div>
                                                     <div>
                                                         {i > 0 && <CustomTooltip title='Remove option'><i className='pi pi-minus-circle' style={{ cursor: 'pointer' }} onClick={() => { arrayHelpers.remove(i) }}></i></CustomTooltip>}
@@ -171,7 +170,7 @@ function AddQuestionForms(props) {
                                                 <div className='text-danger'>
                                                     <ErrorMessage name={`options.${i}.value`} />
                                                 </div>
-                                                {setOptionValue(opt.value.length)}
+                                                {setOptionValue(opt.length)}
                                             </div>
                                         )) : null}
                                         
