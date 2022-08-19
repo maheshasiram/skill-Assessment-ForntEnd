@@ -31,10 +31,8 @@ function AddQuestionForms(props) {
         question: Yup.string()
             .required('Question is required'),
         options: Yup.array().of(
-            // Yup.object().shape({
-                 Yup.string()
-                    .required('please enter option in text field')
-            // })
+            Yup.string()
+                .required('please enter option in text field')
         )
     });
 
@@ -158,7 +156,7 @@ function AddQuestionForms(props) {
                                                         id={`options.${i}`}
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
-                                                        onKeyUp={()=>setAddOptionErr(null)}
+                                                        onKeyUp={() => setAddOptionErr(null)}
                                                     />
                                                     <div className="field-checkbox ml-2">
                                                         <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
@@ -173,7 +171,7 @@ function AddQuestionForms(props) {
                                                 {setOptionValue(opt.length)}
                                             </div>
                                         )) : null}
-                                        
+
                                     </div>
                                 )
                             }}

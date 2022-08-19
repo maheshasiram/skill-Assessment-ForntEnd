@@ -66,21 +66,28 @@ function QuestionCategory(props) {
         >
           <Typography>{data.question}</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Answer: {data.answer}
-          </Typography>
-          <Typography>
-          author:{data.author}
-          </Typography>
-          <Typography>
-          questionType:{data.questionType}
-          </Typography>
+        <AccordionDetails className='row'>
+        
+          <div className='col-sm-6 float-start'>
+          <b className='d-flex bg-success text-white'><span className='ms-2'>Options For Answer</span></b>
           {data.options.map((opt,i)=>(
-            <Typography key={i}>
-            {i}:{opt}
+            <Typography key={i} className='d-flex'>
+           <label>{i} :</label> <Typography className='ms-2'>{opt}</Typography>
             </Typography>
           ))}
+          </div>
+          <div className='float-start col-sm-6'>
+          <b className='bg-success text-white d-flex col-sm-10'><span className='ms-2'>Details Of Question</span> </b>
+          <Typography className='d-flex'>
+           <label>Answer :</label> <Typography className='ms-2'>{data.answer}</Typography> 
+          </Typography>
+          <Typography className='d-flex'>
+         <label>Author :</label><Typography className='ms-2'>{data.answer}</Typography>
+          </Typography>
+          <Typography className='d-flex'>
+          <label>questionType :</label><Typography className='ms-2'>{data.author}</Typography>
+          </Typography>
+          </div>
         </AccordionDetails>
       </Accordion>
       ))
