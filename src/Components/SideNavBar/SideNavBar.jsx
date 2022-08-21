@@ -193,7 +193,7 @@ function SideNavBar() {
           <Loader />
           <DrawerHeader />
           <div className="content">
-            {activeTab === 'User Management' && <UserManagement />}
+            {activeTab === 'User Management' && <UserManagement /> }
             {activeTab === 'Configuration' && <Configuration />}
             {activeTab === 'Categories' && <Categories />}
             {activeTab === 'DashBoard' && <DashBoard />}

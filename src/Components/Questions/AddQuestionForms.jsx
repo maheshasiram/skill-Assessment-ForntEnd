@@ -166,7 +166,7 @@ function AddQuestionForms(props) {
                                                     </div>
                                                 </div>
                                                 <div className='text-danger'>
-                                                    <ErrorMessage name={`options.${i}.value`} />
+                                                    <ErrorMessage name={`options.${i}`} />
                                                 </div>
                                                 {setOptionValue(opt.length)}
                                             </div>
