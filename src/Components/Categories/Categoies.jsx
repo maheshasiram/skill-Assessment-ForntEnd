@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { getAllCategories, deleteCategory, updateCategory } from '../../actions/actions';
@@ -24,8 +24,14 @@ function Categories() {
     const [currentPage, setCurrentPage] = useState(1);
     const [editCategory, setEditCategory] = useState(null);
 
+//useEffect will call twice in React-18 version so, we are using (callUseeffect) state to make call only once.
+const callUseeffect = useRef(true);
+
     useEffect(() => {
+        if(callUseeffect.current){
+            callUseeffect.current = false
         dispatch(getAllCategories(categoryParams))
+        }
     }, [])
 
 

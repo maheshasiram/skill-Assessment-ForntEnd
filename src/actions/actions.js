@@ -59,7 +59,7 @@ export const onSubmitLogin = (values, callback) => {
         callback(response)
         dispatch({ type: Types.IS_LOGIN_LOADING, payload: false });
         dispatch({ type: Types.LOGIN, payload: response });
-        dispatch(getUsers(response.data.token, usersParams));
+        // dispatch(getUsers(response.data.token, usersParams));
         sessionStorage.setItem('JWTtoken', response.data.token);
         RefreahToken(response.data.token);
       })

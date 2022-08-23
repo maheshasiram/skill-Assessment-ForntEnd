@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "primereact/button";
 import { InputText } from 'primereact/inputtext';
 import Accordion from '@mui/material/Accordion';
@@ -12,10 +12,17 @@ import { getQuestions } from '../../actions/actions';
 
 function QuestionCategory(props) {
 
+  //useEffect will call twice in React-18 version so, we are using (callUseeffect) state to make call only once.
+  const callUseeffect = useRef(true);
+
   const dispatch = useDispatch();
 
+
   useEffect(() => {
+    if(callUseeffect.current){
+      callUseeffect.current = false
     dispatch(getQuestions())
+    }
   }, []);
 
   const {getAllQuestions}= useSelector(state=>state)

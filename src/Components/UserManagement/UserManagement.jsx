@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { deleteUser, getUserRoles, getUsers, restoreUser } from '../../actions/actions';
@@ -28,11 +28,17 @@ function UserManagement() {
     const [resetPasswordForm, setResetPasswordForm] = useState(false);
     const [user, setUser] = useState('');
 
+     //useEffect will call twice in React-18 version so, we are using (callUseeffect) state to make call only once.
+  const callUseeffect = useRef(true);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if(callUseeffect.current){
+        callUseeffect.current = false
         dispatch(getUsers(sessionStorage.getItem('JWTtoken'), usersParams));
-        dispatch(getUserRoles())
+        dispatch(getUserRoles());
+        }
     }, []);
 
     const CreateUser = () => {
