@@ -23,7 +23,6 @@ function AddQuestionForms(props) {
     const [selectedType, setSelectedType] = useState(questionTypes[0]);
     const [optAnswer, setOptAnswer] = useState([]);
     const [addOptionErr, setAddOptionErr] = useState(null);
-    const [optionValue, setOptionValue] = useState(null);
 
     const dispatch = useDispatch();
 
@@ -39,9 +38,10 @@ function AddQuestionForms(props) {
     const onSubmitQuestion = (values) => {
         let questionObj = _.cloneDeep(values);
         questionObj.answer = optAnswer.toString();
-        questionObj.author = jwtDecode(sessionStorage.getItem('JWTtoken')).username
-        questionObj.deleted = false
-        questionObj.deletedBy = jwtDecode(sessionStorage.getItem('JWTtoken')).username
+        questionObj.author = jwtDecode(sessionStorage.getItem('JWTtoken')).username;
+        questionObj.deleted = false;
+        questionObj.deletedBy = jwtDecode(sessionStorage.getItem('JWTtoken')).username;
+        questionObj.questionType = selectedType
         dispatch(addQuestion(questionObj, (data) => {
             if (data.status === 200) {
                 onCloseDialog();
@@ -51,9 +51,9 @@ function AddQuestionForms(props) {
                     onok: () => {
                         dispatch(getQuestions());
                     }
-                }))
+                }));
             }
-        }))
+        }));
     }
 
 
@@ -73,12 +73,17 @@ function AddQuestionForms(props) {
             question: '',
             options: [""],
             answer: null,
-            questionType: selectedType,
+            // questionType: selectedType,
             marks: 1,
         },
 
         onSubmit: (values) => {
-            onSubmitQuestion(values);
+            if(optAnswer.length > 0){
+                onSubmitQuestion(values);
+            }else{
+                setAddOptionErr('Please Check Answer Field');
+            }
+           
         },
         validationSchema: CreateQuestionSchema,
     })
@@ -135,12 +140,14 @@ function AddQuestionForms(props) {
                                         <label htmlFor="options">Options :
                                             <CustomTooltip title='Add option'>
                                                 <AddCircleIcon sx={{ cursor: 'pointer' }} color='action' onClick={() => {
-                                                    if (optionValue !== 0) {
-                                                        arrayHelpers.push("")
-                                                    } else {
-                                                        setAddOptionErr('Please Enter Blank Option')
-                                                    }
-
+                                                    options.forEach((optn,i) => {
+                                                        if(optn === ''){
+                                                            setAddOptionErr('Please Enter Blank Option');
+                                                        }else if(options.length === i+1){
+                                                            arrayHelpers.push("");
+                                                        }
+                                                    });
+                                                  
                                                 }} />
                                             </CustomTooltip>
                                         </label>
@@ -159,19 +166,18 @@ function AddQuestionForms(props) {
                                                         onKeyUp={() => setAddOptionErr(null)}
                                                     />
                                                     <div className="field-checkbox ml-2">
-                                                        <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span>
+                                                    <React.Fragment>
+                                                        <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span> </React.Fragment>
                                                     </div>
                                                     <div>
-                                                        {i > 0 && <CustomTooltip title='Remove option'><i className='pi pi-minus-circle' style={{ cursor: 'pointer' }} onClick={() => { arrayHelpers.remove(i) }}></i></CustomTooltip>}
+                                                        {i > 0 && <CustomTooltip title='Remove option'><i className='pi pi-minus-circle' style={{ cursor: 'pointer' }} onClick={()=>{arrayHelpers.remove(i); setAddOptionErr(null);} }></i></CustomTooltip>}
                                                     </div>
                                                 </div>
                                                 <div className='text-danger'>
                                                     <ErrorMessage name={`options.${i}`} />
                                                 </div>
-                                                {setOptionValue(opt.length)}
                                             </div>
                                         )) : null}
-
                                     </div>
                                 )
                             }}

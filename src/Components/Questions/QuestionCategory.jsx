@@ -65,7 +65,7 @@ function QuestionCategory(props) {
       />}
       {getAllQuestions && getAllQuestions.data && getAllQuestions.data.map((data,i)=>(
         
-        <Accordion key={i} expanded={expanded === `panel${i}`} onChange={handleChange(`panel${i}`)}>
+        <Accordion key={i} className='mt-2' expanded={expanded === `panel${i}`} onChange={handleChange(`panel${i}`)}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
@@ -78,22 +78,25 @@ function QuestionCategory(props) {
           <div className='col-sm-6 float-start'>
           <b className='d-flex bg-success text-white'><span className='ms-2'>Options</span></b>
           {data.options.map((opt,i)=>(
-            <Typography key={i} className='d-flex'>
+            <div key={i} className='d-flex'>
            <label>{i+1} :</label> <Typography className='ms-2'>{opt}</Typography>
-            </Typography>
+            </div>
           ))}
           </div>
           <div className='float-start col-sm-6'>
           <b className='bg-success text-white d-flex col-sm-10'><span className='ms-2'>Details</span> </b>
-          <Typography className='d-flex'>
+          <div className='d-flex'>
            <label>Answer :</label> <Typography className='ms-2'>{data.answer}</Typography> 
-          </Typography>
-          <Typography className='d-flex'>
+          </div>
+          <div className='d-flex'>
          <label>Author :</label><Typography className='ms-2'>{data.author}</Typography>
-          </Typography>
-          <Typography className='d-flex'>
+          </div>
+          <div className='d-flex'>
           <label>questionType :</label><Typography className='ms-2'>{data.questionType}</Typography>
-          </Typography>
+          </div>
+          <div className='d-flex'>
+          <label>Marks :</label><Typography className='ms-2'>{data.marks}</Typography>
+          </div>
           </div>
         </AccordionDetails>
       </Accordion>
