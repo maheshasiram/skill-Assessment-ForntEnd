@@ -18,12 +18,12 @@ import { AlertDialog } from '../../ReuseComponents/Dialogs/actiondialog';
 import CustomTooltip from '../../ReuseComponents/CustomTooltip/CustomTooltip';
 
 function AddQuestionForms(props) {
-    const { onCloseDialog, actionType } = props;
+    const { onCloseDialog, actionType, editQuestiondata } = props;
     const questionTypes = ['Radio', 'CheckBox'];
-    const [selectedType, setSelectedType] = useState(questionTypes[0]);
-    const [optAnswer, setOptAnswer] = useState([]);
+    const [selectedType, setSelectedType] = useState(actionType === 'Add' ? questionTypes[0]: editQuestiondata.questionType);
+    const [optAnswer, setOptAnswer] = useState(actionType === 'Add' ? [] : editQuestiondata.answer);
     const [addOptionErr, setAddOptionErr] = useState(null);
-
+   
     const dispatch = useDispatch();
 
     const CreateQuestionSchema = Yup.object().shape({
@@ -69,13 +69,12 @@ function AddQuestionForms(props) {
     }
 
     const formik = useFormik({
-        initialValues: {
+        initialValues: actionType === 'Add' ? {
             question: '',
             options: [""],
             answer: null,
-            // questionType: selectedType,
             marks: 1,
-        },
+        } : editQuestiondata,
 
         onSubmit: (values) => {
             if(optAnswer.length > 0){
@@ -83,7 +82,6 @@ function AddQuestionForms(props) {
             }else{
                 setAddOptionErr('Please Check Answer Field');
             }
-           
         },
         validationSchema: CreateQuestionSchema,
     })

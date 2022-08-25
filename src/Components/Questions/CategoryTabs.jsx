@@ -4,9 +4,9 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import QuestionCategory from './QuestionCategory';
+import QuestionCategory from './Questions';
 
-function QuestionTabs(props) {
+function CategoryTabs(props) {
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {
@@ -33,4 +33,4 @@ function QuestionTabs(props) {
     );
 }
 
-export default QuestionTabs;
+export default CategoryTabs;
