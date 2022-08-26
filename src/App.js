@@ -31,7 +31,6 @@ function App() {
         dispatch({ type: Types.HEALTH, payload: err });
       });
     }
-   
   }, []);
 
 

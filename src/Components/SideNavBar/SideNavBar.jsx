@@ -32,7 +32,7 @@ import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import DashBoard from "../DashBoard/DashBoard";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Questions from "../Questions/Questions";
+import QuestionMainComponent from "../Questions/QuestionMainComponent";
 import QuizIcon from '@mui/icons-material/Quiz';
 
 const drawerWidth = 240;
@@ -197,7 +197,7 @@ function SideNavBar() {
             {activeTab === 'Configuration' && <Configuration />}
             {activeTab === 'Categories' && <Categories />}
             {activeTab === 'DashBoard' && <DashBoard />}
-            {activeTab === 'Questions' && <Questions />}
+            {activeTab === 'Questions' && <QuestionMainComponent />}
           </div>
         </Box>
       </Box>

@@ -94,96 +94,96 @@ function AddQuestionForms(props) {
             title={actionType}
             id="Question-form"
         >
-            <FormikProvider value={formik}>
-                <form id="Question-form" onSubmit={formik.handleSubmit} className="my-2 mx-2">
-                    <h6>Question :</h6>
-                    <Editor
-                        value={formik.values.question}
-                        name='question'
-                        id='question'
-                        onTextChange={(e) => formik.setFieldValue("question", e.textValue.trim())}
-                        onChange={formik.handleChange}
-                    />
-                    {formik.touched.question && formik.errors.question && <div className='text-danger'>{formik.errors.question}</div>}
-                    <div className='d-flex mt-3'>
-                        <label>Question Type :</label>
-                        {
-                            questionTypes.map((qType, i) => {
-                                return (
-                                    <div key={i} className="field-radiobutton mx-3">
-                                        <RadioButton inputId={i} name="questionType" value={qType} onChange={(e) => setSelectedType(e.value)} checked={selectedType === qType} />
-                                        <label htmlFor={i}>{qType}</label>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+        <FormikProvider value={formik}>
+            <form id="Question-form" onSubmit={formik.handleSubmit} className="my-2 mx-2">
+                <h6>Question :</h6>
+                <Editor
+                    value={formik.values.question}
+                    name='question'
+                    id='question'
+                    onTextChange={(e) => formik.setFieldValue("question", e.textValue.trim())}
+                    onChange={formik.handleChange}
+                />
+                {formik.touched.question && formik.errors.question && <div className='text-danger'>{formik.errors.question}</div>}
+                <div className='d-flex mt-3'>
+                    <label>Question Type :</label>
+                    {
+                        questionTypes.map((qType, i) => {
+                            return (
+                                <div key={i} className="field-radiobutton mx-3">
+                                    <RadioButton inputId={i} name="questionType" value={qType} onChange={(e) => setSelectedType(e.value)} checked={selectedType === qType} />
+                                    <label htmlFor={i}>{qType}</label>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
 
-                    <div>
-                        <label>Marks :</label>
-                        <InputNumber
-                            inputId="integeronly"
-                            value={formik.values.marks}
-                            name='marks'
-                            onValueChange={formik.handleChange}
-                        />
-                    </div>
-                    <div className='d-block mt-2'>
-                        <FieldArray
-                            name="options"
-                            render={(arrayHelpers) => {
-                                const options = formik.values.options
-                                return (
-                                    <div>
-                                        <label htmlFor="options">Options :
-                                            <CustomTooltip title='Add option'>
-                                                <AddCircleIcon sx={{ cursor: 'pointer' }} color='action' onClick={() => {
-                                                    options.forEach((optn,i) => {
-                                                        if(optn === ''){
-                                                            setAddOptionErr('Please Enter Blank Option');
-                                                        }else if(options.length === i+1){
-                                                            arrayHelpers.push("");
-                                                        }
-                                                    });
-                                                  
-                                                }} />
-                                            </CustomTooltip>
-                                        </label>
-                                        {addOptionErr && addOptionErr}
-                                        {options && options.length > 0 ? options.map((opt, i) => (
-                                            <div key={i}>
-                                                <div className='d-flex align-items-center mt-2'>
-                                                    <label htmlFor="options" >{i + 1}.</label>
-                                                    <InputText
-                                                        value={formik.values.options[i]}
-                                                        name={`options.${i}`}
-                                                        className='w-100'
-                                                        id={`options.${i}`}
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}
-                                                        onKeyUp={() => setAddOptionErr(null)}
-                                                    />
-                                                    <div className="field-checkbox ml-2">
-                                                    <React.Fragment>
-                                                        <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span> </React.Fragment>
-                                                    </div>
-                                                    <div>
-                                                        {i > 0 && <CustomTooltip title='Remove option'><i className='pi pi-minus-circle' style={{ cursor: 'pointer' }} onClick={()=>{arrayHelpers.remove(i); setAddOptionErr(null);} }></i></CustomTooltip>}
-                                                    </div>
+                <div>
+                    <label>Marks :</label>
+                    <InputNumber
+                        inputId="integeronly"
+                        value={formik.values.marks}
+                        name='marks'
+                        onValueChange={formik.handleChange}
+                    />
+                </div>
+                <div className='d-block mt-2'>
+                    <FieldArray
+                        name="options"
+                        render={(arrayHelpers) => {
+                            const options = formik.values.options
+                            return (
+                                <div>
+                                    <label htmlFor="options">Options :
+                                        <CustomTooltip title='Add option'>
+                                            <AddCircleIcon sx={{ cursor: 'pointer' }} color='action' onClick={() => {
+                                                options.forEach((optn,i) => {
+                                                    if(optn === ''){
+                                                        setAddOptionErr('Please Enter Blank Option');
+                                                    }else if(options.length === i+1){
+                                                        arrayHelpers.push("");
+                                                    }
+                                                });
+                                                
+                                            }} />
+                                        </CustomTooltip>
+                                    </label>
+                                    {addOptionErr && addOptionErr}
+                                    {options && options.length > 0 ? options.map((opt, i) => (
+                                        <div key={i}>
+                                            <div className='d-flex align-items-center mt-2'>
+                                                <label htmlFor="options" >{i + 1}.</label>
+                                                <InputText
+                                                    value={formik.values.options[i]}
+                                                    name={`options.${i}`}
+                                                    className='w-100'
+                                                    id={`options.${i}`}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    onKeyUp={() => setAddOptionErr(null)}
+                                                />
+                                                <div className="field-checkbox ml-2">
+                                                <React.Fragment>
+                                                    <Checkbox inputId="answer" name="answer" value={formik.values.options[i]} disabled={!formik.values.options[i] ? true : false} checked={optAnswer.indexOf(formik.values.options[i]) !== -1} onChange={onAnswerChange} /> <span>Answer</span> </React.Fragment>
                                                 </div>
-                                                <div className='text-danger'>
-                                                    <ErrorMessage name={`options.${i}`} />
+                                                <div>
+                                                    {i > 0 && <CustomTooltip title='Remove option'><i className='pi pi-minus-circle' style={{ cursor: 'pointer' }} onClick={()=>{arrayHelpers.remove(i); setAddOptionErr(null);} }></i></CustomTooltip>}
                                                 </div>
                                             </div>
-                                        )) : null}
-                                    </div>
-                                )
-                            }}
-                        />
+                                            <div className='text-danger'>
+                                                <ErrorMessage name={`options.${i}`} />
+                                            </div>
+                                        </div>
+                                    )) : null}
+                                </div>
+                            )
+                        }}
+                    />
 
-                    </div>
-                </form>
-            </FormikProvider>
+                </div>
+            </form>
+        </FormikProvider>
         </FormDialog>
 
     );

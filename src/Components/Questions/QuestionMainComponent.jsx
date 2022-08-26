@@ -1,7 +1,7 @@
 import * as React from 'react';
 import QuestionTabs from './CategoryTabs';
 
-function QuestionMainComponent(props) {
+function QuestionMainComponent() {
     
     return (
         <div className='questionsComponent'>
