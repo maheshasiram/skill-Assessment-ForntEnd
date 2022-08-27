@@ -6,12 +6,14 @@ const endPoints={
     HEALTH: "/health",
     USERS: "/users",
     USER: "/user",
+    RESET: "/user/password/reset",
     USERROLES: "/user/roles",
     REFRESH: "/token/refresh",
     CATEGORIES: "/categories",
     CATEGORY: "/category",
     QUESTION: "/question",
     QUESTIONS: "/questions"
+
 } 
 
 export default endPoints;

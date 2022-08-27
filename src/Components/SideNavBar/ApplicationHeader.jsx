@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,6 +18,9 @@ import Logout from '@mui/icons-material/Logout';
 import Divider from '@mui/material/Divider';
 import CustomTooltip from "../../ReuseComponents/CustomTooltip/CustomTooltip";
 import jwtDecode from "jwt-decode";
+import ChangePassword from "../UserManagement/ChangePassword";
+import { useDispatch, useSelector } from 'react-redux';
+
 
 //After successful login Admin redirect to this page
 
@@ -28,37 +31,56 @@ function ApplicationHeader() {
   const navigate = useNavigate();
 
   // logout the user and navigate to home login page
-  
+
   const onLogout = () => {
     navigate('/')
   }
 
 
+  const [actionType, setActionType] = useState('');
+  const [changePasswordForm, setChangePasswordForm] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const onCloseDialog = () => {
+    setDialogOpen(false);
+    setChangePasswordForm(false);
+}
+
+  const resetPassword = () => {
+    setActionType('Submit');
+    setChangePasswordForm(true);
+  }
+
   return (
     <React.Fragment>
- 
-    <CustomTooltip title="Account Settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-          >
-            <Avatar sx={{ width: 45, height: 45 }}>{jwtDecode(sessionStorage.getItem('JWTtoken')).username.charAt(0).toUpperCase()}</Avatar>
-          </IconButton>
-          </CustomTooltip>
+
+      {changePasswordForm && <ChangePassword
+        actionType={actionType}
+        onCloseDialog={onCloseDialog}
+      />}
+      <CustomTooltip title="Account Settings">
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? 'account-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          <Avatar sx={{ width: 45, height: 45 }}>{jwtDecode(sessionStorage.getItem('JWTtoken')).username.charAt(0).toUpperCase()}</Avatar>
+        </IconButton>
+      </CustomTooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -101,11 +123,11 @@ function ApplicationHeader() {
           <Avatar /> My account
         </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={resetPassword}>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
-          Add another account
+          Reset Password
         </MenuItem>
         <MenuItem>
           <ListItemIcon>

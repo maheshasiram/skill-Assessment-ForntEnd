@@ -234,6 +234,29 @@ export const resetPassword=(user, pswd, callback)=>{
   }
 }
 
+
+export const changePassword = (values, callback) => {
+  return function (dispatch) {
+    dispatch(onLoader(true));
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('JWTtoken'),
+      }
+    }
+    axiosinstance.put(endPoints.RESET, values , config)
+      .then(response => {
+        // dispatch({ type: Types.DELETE_USER, payload: response });
+         callback(response);
+         dispatch(onLoader(false));
+      })
+      .catch(err => {
+       // dispatch({ type: Types.DELETE_USER, payload: err });
+        callback(err);
+        dispatch(onLoader(false));
+      })
+  }
+}
+
 //--------Catgegories--------
 
 /**
