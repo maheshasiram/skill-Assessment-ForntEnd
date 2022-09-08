@@ -9,6 +9,8 @@ import { Types } from './constants/Types';
 import './Components/Styles/Styles.scss';
 import ServerError from './Components/ServerError/ServerError';
 import SideNavBar from './Components/SideNavBar/SideNavBar';
+import PublicRoute from './Components/Routes/PublicRoute';
+import PrivateRoute from './Components/Routes/PrivateRoute';
 
 
 function App() {
@@ -38,9 +40,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<SideNavBar />} />
-          <Route path='/servererror' element={<ServerError />} ></Route>
+          <Route path="/" element={<PublicRoute component={Home} /> } />
+          <Route path="/admin" element={<PrivateRoute component={SideNavBar} /> } />
+          <Route path='/servererror' element={<PrivateRoute component={ServerError} /> } /> 
         </Routes>
       </BrowserRouter>
     </div>

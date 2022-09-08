@@ -33,7 +33,8 @@ function ApplicationHeader() {
   // logout the user and navigate to home login page
 
   const onLogout = () => {
-    navigate('/')
+    navigate('/');
+    sessionStorage.clear();
   }
 
 
