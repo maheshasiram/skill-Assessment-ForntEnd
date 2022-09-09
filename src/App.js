@@ -11,6 +11,7 @@ import ServerError from './Components/ServerError/ServerError';
 import SideNavBar from './Components/SideNavBar/SideNavBar';
 import PublicRoute from './Components/Routes/PublicRoute';
 import PrivateRoute from './Components/Routes/PrivateRoute';
+import NotFound from './Components/NotFound/NotFound';
 
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
         <Routes>
           <Route path="/" element={<PublicRoute component={Home} /> } />
           <Route path="/admin" element={<PrivateRoute component={SideNavBar} /> } />
-          <Route path='/servererror' element={<PrivateRoute component={ServerError} /> } /> 
+          <Route path='/servererror' element={<ServerError /> } /> 
+          <Route path='*' element={ <NotFound /> }/>
         </Routes>
       </BrowserRouter>
     </div>

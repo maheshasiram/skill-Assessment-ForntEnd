@@ -16,13 +16,13 @@ function Home() {
 
     return (
             <div className="homeMianDiv">
-                <div className="logInMainDiv">
+               {health && health.status === 200 && <div className="logInMainDiv">
                 <div className="homeHeader">
                     <h1> Welcome To Skill Assessment</h1>
                 <Login />
                 </div>
                 <AboutUs />
-                </div>
+                </div>}
             </div>
 
     )

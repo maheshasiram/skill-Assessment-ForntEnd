@@ -34,6 +34,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import QuestionMainComponent from "../Questions/QuestionMainComponent";
 import QuizIcon from '@mui/icons-material/Quiz';
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -107,6 +108,15 @@ function SideNavBar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('User Management');
+  const { health } = useSelector(state => state);
+  const navigate = useNavigate();
+  
+
+  // useEffect(() => {
+      
+  //     health && health.status !== 200 && navigate('/servererror');
+  // },[health]);
+
 
   const handleDrawerOpen = () => {
     if (open) {
